@@ -1,15 +1,12 @@
 <template>
     <div>
-        <div class="map-wrapper row col-sm-12">
-            <!--div id='popup-container'>
-                <p id='popup-coordinates'></p>
-            </div-->
-            <div :id="elem_id" ref="map-root" class="map">
-                <div class="basemap-button">
+        <div :id="map_container_id">
+            <div :id="elem_id" class="map">
+                <!--div class="basemap-button">
                     <img v-if="showSatIcon" id="basemap_sat" src="../../assets/satellite_icon.jpg" @click="setBaseLayer('sat')" />
                     <img v-if="!showSatIcon" id="basemap_osm" src="../../assets/map_icon.png" @click="setBaseLayer('osm')" />
-                </div>
-                <div class="optional-layers-wrapper">
+                </div-->
+                <!--div class="optional-layers-wrapper">
                     <div class="optional-layers-button">
                         <template v-if="mode === 'layer'">
                             <img src="../../assets/info-bubble.svg" @click="setMode('draw')" />
@@ -45,21 +42,9 @@
                     <div class="optional-layers-button">
                         <img v-if="selectedFeatureId" id="delete_feature" src="../../assets/trash.svg" @click="removeLeaselicenceFeature()" />
                     </div>
-                </div>
+                </div-->
             </div>
         </div>
-        <div :id="popup_id" class="ol-popup">
-            <a href="#" :id="popup_closer_id" class="ol-popup-closer">
-                <svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='20' width='20' class="close-icon">
-                    <g transform='scale(3)'>
-                        <path d     ="M 5.2916667,2.6458333 A 2.6458333,2.6458333 0 0 1 2.6458335,5.2916667 2.6458333,2.6458333 0 0 1 0,2.6458333 2.6458333,2.6458333 0 0 1 2.6458335,0 2.6458333,2.6458333 0 0 1 5.2916667,2.6458333 Z" style="fill:#ffffff;fill-opacity:1;stroke-width:0.182031" id="path846" />
-                        <path d     ="M 1.5581546,0.94474048 2.6457566,2.0324189 3.7334348,0.94474048 4.3469265,1.5581547 3.2592475,2.6458334 4.3469265,3.7334353 3.7334348,4.3469261 2.6457566,3.2593243 1.5581546,4.3469261 0.9447402,3.7334353 2.0323422,2.6458334 0.9447402,1.5581547 Z" style="fill:#f46464;fill-opacity:1;stroke:none;stroke-width:0.0512157" id="path2740-3" />
-                    </g>
-                </svg>
-            </a>
-            <div :id="popup_content_id" class="text-center"></div>
-        </div>
-
         <!--div :id="popup_id" class="ol-popup">
             <a href="#" :id="popup_closer_id" class="ol-popup-closer">
                 <svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='20' width='20' class="close-icon">
@@ -69,7 +54,7 @@
                     </g>
                 </svg>
             </a>
-            <div :id="popup_content_id"></div>
+            <div :id="popup_content_id" class="text-center"></div>
         </div-->
     </div>
 
@@ -123,6 +108,7 @@ export default {
             */
             showSatIcon: true,
             map: null,
+            map_container_id: uuid(),
             elem_id: uuid(),
             popup_id: uuid(),
             popup_closer_id: uuid(),
@@ -227,6 +213,7 @@ export default {
         },
         initMap: async function() {
             let vm = this;
+            /*
             // Full screen toggle
             const fullScreenControl = new FullScreen();
             // Show mouse coordinates
@@ -238,13 +225,7 @@ export default {
                 target: document.getElementById('mouse-position'),
                 className: 'custom-mouse-position',
             });
-            /*
-            const scaleLineControl = new ScaleLine();
-            const zoomSliderControl = new ZoomSlider();
-            const zoomToExtentControl = new ZoomToExtent({
-                extent: [112, -29, 119, -34],
-                });
-                */
+            */
 
             let satelliteTileWms = new TileWMS({
                         url: env['kmi_server_url'] + '/geoserver/public/wms',
@@ -271,16 +252,12 @@ export default {
             })
 
             vm.map = new Map({
+                /*
                 controls: olDefaults().extend([
                     fullScreenControl,
                     mousePositionControl,
-                    /*
-                    zoomSliderControl,
-                    zoomToExtentControl,
-                    overviewMapControl,
-                    scaleLineControl,
-                    */
                     ]),
+                    */
                 layers: [
                     vm.tileLayerOsm, 
                     vm.tileLayerSat,
@@ -291,13 +268,9 @@ export default {
                     zoom: 7,
                     projection: 'EPSG:4326',
                     //extent: [112.95, 120, -30.95, -33],
-                    /*
-                    maxZoom: 12,
-                    minZoom: 3,
-                    */
                 })
             });
-
+            /*
             vm.drawForLeaselicence = new Draw({
                 source: vm.leaselicenceQuerySource,
                 //type: 'MultiPolygon',
@@ -313,12 +286,6 @@ export default {
             });
             vm.leaselicenceQueryLayer = new VectorLayer({
                 source: vm.leaselicenceQuerySource,
-                /*
-                style: function(feature, resolution){
-                    //let status = getStatusForColour(feature, false, vm.display_at_time_of_submitted)
-                    return getLeaselicenceFeatureStyle(status, feature.get('checked'))
-                },
-                */
             });
             //console.log(vm.drawForLeaselicence);
             vm.map.addInteraction(vm.drawForLeaselicence);
@@ -454,6 +421,7 @@ export default {
                     }
                 }
             });
+            */
 
         },
         removeLeaselicenceFeature: function() {
@@ -649,7 +617,15 @@ export default {
 
             return styles
         },
-
+        forceMapRefresh() {
+            console.log('forceToRefreshMap()')
+            let vm = this
+            setTimeout(function(){
+                console.log('updateSize()')
+                vm.map.updateSize();
+            }, 700)
+        },
+/*
         forceMapRefresh: function() {
             let vm = this
             setTimeout(function(){
@@ -657,6 +633,7 @@ export default {
             }, 50)
             console.log(document.getElementById(this.elem_id))
         },
+        */
         setBaseLayer: function(selected_layer_name){
             console.log('in setBaseLayer')
             if (selected_layer_name == 'sat') {
@@ -725,6 +702,12 @@ export default {
         },
 
     },
+    mounted() {
+        console.log("mounted")
+        this.initMap();
+    },
+
+    /*
     created() {
         this.$nextTick(() => {
             this.loadLeaseLicenceGeometry();
@@ -738,15 +721,12 @@ export default {
         this.setMode('layer')
         this.addOptionalLayers()
         //this.map.setSize([690, 400]);
-        this.map.setSize([window.innerWidth, window.innerHeight]);
-        /*
-        console.log(this.map.getView().getCenter());
-        this.map.getView().setCenter([115.95, -31.95]);
-        */
+        //this.map.setSize([window.innerWidth, window.innerHeight]);
         //this.forceMapRefresh();
         //this.map.renderSync();
         //sessionStorage.clear();
     },
+    */
 }
 </script>
 

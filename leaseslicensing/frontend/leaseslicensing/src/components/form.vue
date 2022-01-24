@@ -50,26 +50,24 @@
               </div>
               <div class="tab-pane fade" id="pills-map" role="tabpanel" aria-labelledby="pills-map-tab">
                 <div class="row col-sm-12">
-                    <FormSection :formCollapse="false" label="Map" Index="proposal_geometry">
-                        <ComponentMap
+                    <FormSection :formCollapse="false" label="Map" Index="map">
+                        <!--ComponentMap
                             ref="component_map"
                             :is_internal="is_internal"
                             :is_external="is_external"
                             :key="componentMapKey"
-                            v-if="componentMapOn"
                             @featuresDisplayed="updateTableByFeatures"
                             :can_modify="can_modify"
                             :display_at_time_of_submitted="show_col_status_when_submitted"
                             @featureGeometryUpdated="featureGeometryUpdated"
                             @popupClosed="popupClosed"
                             :proposal="proposal"
-                        />
-
-                        <!--ComponentMap
-                            ref="component_map"
-                            :key="componentMapKey"
-                            v-if="componentMapOn"
                         /-->
+
+                        <ComponentMap
+                            ref="component_map"
+                            :proposal="proposal"
+                        />
                     </FormSection>
                 </div>
 
@@ -407,8 +405,14 @@ import Confirmation from '@/components/common/confirmation.vue'
                 this.componentMapKey++;
             },
             toggleComponentMapOn: function() {
+                /*
                 this.incrementComponentMapKey()
                 this.componentMapOn = true;
+                this.$nextTick(() => {
+                    this.$refs.component_map.forceMapRefresh();
+                });
+                */
+                this.$refs.component_map.forceMapRefresh();
             },
             updateTableByFeatures: function() {
             },
