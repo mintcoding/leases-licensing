@@ -27,6 +27,8 @@ from django.core.cache import cache
 from ledger_api_client.ledger_models import EmailUserRO as EmailUser,Address, EmailIdentity #EmailUserAction
 from ledger_api_client.country_models import Country
 from datetime import datetime,timedelta, date
+
+from leaseslicensing.components.main.utils import retrieve_department_users
 from leaseslicensing.components.organisations.models import  (
                                     Organisation,
                                 )
@@ -46,6 +48,19 @@ from leaseslicensing.components.organisations.serializers import (
     OrganisationRequestDTSerializer,
 )
 from leaseslicensing.components.main.models import UserSystemSettings
+
+
+class DepartmentUserList(views.APIView):
+    renderer_classes = [JSONRenderer, ]
+
+    def get(self, request, format=None):
+        data = cache.get('department_users')
+        if not data:
+            retrieve_department_users()
+            data = cache.get('department_users')
+        return Response(data)
+
+        # serializer = UserSerializer(request.user)
 
 
 class GetCountries(views.APIView):

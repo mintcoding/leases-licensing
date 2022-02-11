@@ -235,13 +235,14 @@ export default {
                 visible: true,
                 'render': function(row, type, full){
                     return full.application_type.name_display
-                }
+                },
+                name: 'application_type',
             }
         },
         column_submitter: function(){
             return {
                 data: "id",
-                orderable: true,
+                orderable: false,
                 searchable: false,
                 visible: true,
                 'render': function(row, type, full){
@@ -299,13 +300,14 @@ export default {
                         return moment(full.lodgement_date).format('DD/MM/YYYY')
                     }
                     return ''
-                }
+                },
+                name: 'lodgement_date',
             }
         },
         column_assigned_officer: function(){
             return {
                 data: "id",
-                orderable: true,
+                orderable: false,
                 searchable: false,
                 visible: true,
                 'render': function(row, type, full){
@@ -323,7 +325,7 @@ export default {
             return {
                 // 8. Action
                 data: "id",
-                orderable: true,
+                orderable: false,
                 searchable: false,
                 visible: true,
                 'render': function(row, type, full){
@@ -436,6 +438,7 @@ export default {
                 dom: 'lBfrtip',
                 //buttons:[ ],
                 buttons: buttons,
+                order: [[1, 'desc']],
 
                 columns: columns,
                 processing: true,

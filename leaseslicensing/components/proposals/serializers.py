@@ -3,30 +3,32 @@ from ledger_api_client.ledger_models import EmailUserRO as EmailUser, Address
 from leaseslicensing.components.main.models import ApplicationType
 from leaseslicensing.components.organisations.models import Organisation
 from leaseslicensing.components.proposals.models import (
-                                    ProposalType,
-                                    Proposal,
-                                    ProposalUserAction,
-                                    ProposalLogEntry,
-                                    Referral,
-                                    ProposalRequirement,
-                                    ProposalStandardRequirement,
-                                    ProposalDeclinedDetails,
-                                    AmendmentRequest,
-                                    AmendmentReason,
-                                    ProposalApplicantDetails,
-                                    QAOfficerReferral,
-                                    ProposalOtherDetails,
-                                    ChecklistQuestion,
-                                    ProposalAssessmentAnswer,
-                                    ProposalAssessment,
-                                    RequirementDocument,
-                                    ProposalGeometry,
-                                )
+    ProposalType,
+    Proposal,
+    ProposalUserAction,
+    ProposalLogEntry,
+    Referral,
+    ProposalRequirement,
+    ProposalStandardRequirement,
+    ProposalDeclinedDetails,
+    AmendmentRequest,
+    AmendmentReason,
+    ProposalApplicantDetails,
+    QAOfficerReferral,
+    ProposalOtherDetails,
+    ChecklistQuestion,
+    ProposalAssessmentAnswer,
+    ProposalAssessment,
+    RequirementDocument,
+    ProposalGeometry, SectionChecklist,
+)
 from leaseslicensing.components.main.serializers import CommunicationLogEntrySerializer, ApplicationTypeSerializer
 from leaseslicensing.components.organisations.serializers import OrganisationSerializer
 from leaseslicensing.components.users.serializers import UserAddressSerializer, DocumentSerializer
 from rest_framework import serializers
 from django.db.models import Q
+
+from leaseslicensing.helpers import is_assessor
 from leaseslicensing.ledger_api_utils import retrieve_email_user
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 #from reversion.models import Version
@@ -69,7 +71,6 @@ class ProposalTypeSerializer(serializers.ModelSerializer):
             'code',
             'description',
         )
-
 
     def get_activities(self,obj):
         return obj.activities.names()
@@ -186,39 +187,110 @@ class ChecklistQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChecklistQuestion
-        #fields = '__all__'
-        fields=('id',
-                'text',
-                'answer_type',
-                )
+        fields = (
+            'id',
+            'text',
+            'answer_type',
+        )
+
+
 class ProposalAssessmentAnswerSerializer(serializers.ModelSerializer):
-    question=ChecklistQuestionSerializer(read_only=True)
+    checklist_question = ChecklistQuestionSerializer(read_only=True)
+    accessing_user_can_answer = serializers.SerializerMethodField()
+    accessing_user_can_view = serializers.SerializerMethodField()
+
     class Meta:
         model = ProposalAssessmentAnswer
-        fields = ('id',
-                'question',
-                'answer',
-                'text_answer',
-                )
+        fields = (
+            'id',
+            'checklist_question',
+            'answer_yes_no',
+            'answer_text',
+            'accessing_user_can_answer',
+            'accessing_user_can_view',
+        )
+
+    def get_accessing_user_can_answer(self, answer):
+        accessing_user_can_answer = self.context.get('assessment_answerable_by_accessing_user_now', False)
+        return accessing_user_can_answer
+
+    def get_accessing_user_can_view(self, answer):
+        assessment_belongs_to_accessing_user = self.context.get('assessment_belongs_to_accessing_user', False)
+        if assessment_belongs_to_accessing_user:
+            # this assessment is for the accessing user. Therefore, the user should be able to see QAs anyway.
+            return True
+        else:
+            # this assessment is not for the accessing user. Show/Hide questions according to the configurations
+            if answer.shown_to_others:
+                return True
+            else:
+                return False
+
+
+class ReferralSimpleSerializer(serializers.ModelSerializer):
+    referral = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Referral
+        fields = (
+            'id',
+            'referral',
+        )
+
+    def get_referral(self, obj):
+        email_user = retrieve_email_user(obj.referral)
+        return EmailUserSerializer(email_user).data
+
 
 class ProposalAssessmentSerializer(serializers.ModelSerializer):
-    #checklist=ProposalAssessmentAnswerSerializer(many=True, read_only=True)
-    checklist=serializers.SerializerMethodField()
+    section_answers = serializers.SerializerMethodField()
+    referral = ReferralSimpleSerializer()
 
     class Meta:
         model = ProposalAssessment
-        fields = ('id',
-                'completed',
-                'submitter',
-                'referral_assessment',
-                'referral_group',
-                'referral_group_name',
-                'checklist'
-                )
+        fields = (
+            'id',
+            'completed',
+            'submitter',
+            'referral_assessment',
+            'referral',
+            'section_answers',
+        )
 
-    def get_checklist(self,obj):
-        qs= obj.checklist.order_by('question__order')
-        return ProposalAssessmentAnswerSerializer(qs, many=True, read_only=True).data
+    def get_section_answers(self, proposal_assessment):
+        ret_dict = {}
+        request = self.context.get('request')
+
+        assessment_belongs_to_accessing_user = False
+        assessment_answerable_by_accessing_user_now = False
+        if proposal_assessment.referral:
+            # This assessment is for referrals
+            if request.user.is_authenticated and proposal_assessment.referral.referral == request.user.id:
+                # This assessment is for the accessing user
+                assessment_belongs_to_accessing_user = True
+                if proposal_assessment.proposal.processing_status == Proposal.PROCESSING_STATUS_WITH_REFERRAL:
+                    # When the proposal is in 'with_referral' status, the user can answer
+                    assessment_answerable_by_accessing_user_now = True
+        else:
+            # This assessment is for assessors
+            if request.user.is_authenticated and is_assessor(request.user.id):
+                # This assessment is for the accessing user
+                assessment_belongs_to_accessing_user = True
+                if proposal_assessment.proposal.processing_status == Proposal.PROCESSING_STATUS_WITH_ASSESSOR:
+                    # When the proposal is in 'with_assessor' status, the user can answer
+                    assessment_answerable_by_accessing_user_now = True
+
+        # Retrieve all the SectionChecklist objects used for this ProposalAssessment
+        section_checklists_used = SectionChecklist.objects.filter(id__in=(proposal_assessment.answers.values_list('checklist_question__section_checklist', flat=True).distinct()))
+        for section_checklist in section_checklists_used:
+            # Retrieve all the answers for this section_checklist
+            answers = proposal_assessment.answers.filter(checklist_question__section_checklist=section_checklist).order_by('checklist_question__order')
+            ret_dict[section_checklist.section] = ProposalAssessmentAnswerSerializer(answers, context={
+                'assessment_answerable_by_accessing_user_now': assessment_answerable_by_accessing_user_now,
+                'assessment_belongs_to_accessing_user': assessment_belongs_to_accessing_user,
+            }, many=True).data
+
+        return ret_dict
 
 
 class BaseProposalSerializer(serializers.ModelSerializer):
@@ -253,7 +325,15 @@ class BaseProposalSerializer(serializers.ModelSerializer):
                 'reference',
                 'lodgement_number',
                 'can_officer_process',
-                #'allowed_assessors',
+
+                # 'allowed_assessors',
+                # 'is_qa_officer',
+                # 'qaofficer_referrals',
+                # 'pending_amendment_request',
+                # 'is_amendment_proposal',
+
+                # tab field models
+
                 'applicant_details',
                 'details_text',
                 'proposalgeometry',
@@ -619,16 +699,19 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
 class ProposalReferralSerializer(serializers.ModelSerializer):
     #referral = serializers.CharField(source='referral.get_full_name')
-    referral = serializers.CharField(source='referral_group.name')
+    # referral = serializers.CharField(source='referral_group.name')
     processing_status = serializers.CharField(source='get_processing_status_display')
+
     class Meta:
         model = Referral
         fields = '__all__'
+
 
 class ProposalDeclinedDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProposalDeclinedDetails
         fields = '__all__'
+
 
 class ProposalParkSerializer(BaseProposalSerializer):
     applicant = ApplicantSerializer()
@@ -674,10 +757,16 @@ class InternalProposalSerializer(BaseProposalSerializer):
     can_edit_period = serializers.SerializerMethodField()
     current_assessor = serializers.SerializerMethodField()
     latest_referrals = ProposalReferralSerializer(many=True)
-    #allowed_assessors = EmailUserSerializer(many=True)
+
+    # allowed_assessors = EmailUserSerializer(many=True)
     approval_level_document = serializers.SerializerMethodField()
-    assessor_assessment=ProposalAssessmentSerializer(read_only=True)
-    referral_assessments=ProposalAssessmentSerializer(read_only=True, many=True)
+    #application_type = serializers.CharField(source='application_type.name', read_only=True)
+    #qaofficer_referrals = QAOfficerReferralSerializer(many=True)
+    # reversion_ids = serializers.SerializerMethodField()
+    assessor_assessment = ProposalAssessmentSerializer(read_only=True)
+    referral_assessments = ProposalAssessmentSerializer(read_only=True, many=True)
+    # fee_invoice_url = serializers.SerializerMethodField()
+
     requirements_completed=serializers.SerializerMethodField()
 
     class Meta:
@@ -708,7 +797,9 @@ class InternalProposalSerializer(BaseProposalSerializer):
                 'assessor_mode',
                 'current_assessor',
                 'latest_referrals',
-                #'allowed_assessors',
+
+                # 'allowed_assessors',
+
                 'proposed_issuance_approval',
                 'proposed_decline_status',
                 'proposaldeclineddetails',
@@ -796,10 +887,12 @@ class ProposalLogEntrySerializer(CommunicationLogEntrySerializer):
     def get_documents(self,obj):
         return [[d.name,d._file.url] for d in obj.documents.all()]
 
+
 class SendReferralSerializer(serializers.Serializer):
-    #email = serializers.EmailField()
-    email_group = serializers.CharField()
+    email = serializers.EmailField()
+    # email_group = serializers.CharField()
     text = serializers.CharField(allow_blank=True)
+
 
 class DTReferralSerializer(serializers.ModelSerializer):
     processing_status = serializers.CharField(source='proposal.get_processing_status_display')
@@ -986,12 +1079,13 @@ class ReferralProposalSerializer(InternalProposalSerializer):
             'assessor_box_view': obj.assessor_comments_view(user)
         }
 
+
 class ReferralSerializer(serializers.ModelSerializer):
     processing_status = serializers.CharField(source='get_processing_status_display')
     latest_referrals = ProposalReferralSerializer(many=True)
     can_be_completed = serializers.BooleanField()
     can_process=serializers.SerializerMethodField()
-    referral_assessment=ProposalAssessmentSerializer(read_only=True)
+    referral_assessment = ProposalAssessmentSerializer(read_only=True)
     application_type=serializers.CharField(read_only=True)
     allowed_assessors = EmailUserSerializer(many=True)
     current_assessor = serializers.SerializerMethodField()

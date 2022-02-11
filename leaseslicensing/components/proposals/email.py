@@ -186,23 +186,26 @@ def send_qaofficer_complete_email_notification(proposal, recipients, request, re
         _log_user_email(msg, proposal.submitter, proposal.submitter, sender=sender)
 
 
-def send_referral_email_notification(referral,recipients,request,reminder=False):
+def send_referral_email_notification(referral, recipients, request, reminder=False):
     proposed_start_date= None
-    if referral.proposal.is_filming_application:
-        email = ReferralFilmingSendNotificationEmail()
-        proposed_start_date= referral.proposal.filming_activity.commencement_date
-    else:
-        email = ReferralSendNotificationEmail()
-    url = request.build_absolute_uri(reverse('internal-referral-detail',kwargs={'proposal_pk':referral.proposal.id,'referral_pk':referral.id}))
+    # if referral.proposal.is_filming_application:
+    #     email = ReferralFilmingSendNotificationEmail()
+    #     proposed_start_date= referral.proposal.filming_activity.commencement_date
+    # else:
+    #     email = ReferralSendNotificationEmail()
+    email = ReferralSendNotificationEmail()
+    url = request.build_absolute_uri(reverse('internal-referral-detail', kwargs={'proposal_pk': referral.proposal.id, 'referral_pk': referral.id}))
 
-    filming_handbook_url= settings.COLS_FILMING_HANDBOOK_URL
+    # filming_handbook_url= settings.COLS_FILMING_HANDBOOK_URL
     context = {
         'proposal': referral.proposal,
         'url': url,
-        'reminder':reminder,
+        'reminder': reminder,
         'comments': referral.text,
-        'filming_handbook_url': filming_handbook_url,
-        'proposed_start_date': proposed_start_date,
+        # 'filming_handbook_url': filming_handbook_url,
+        # 'proposed_start_date': proposed_start_date,
+        'filming_handbook_url': '',
+        'proposed_start_date': '',
     }
 
     #msg = email.send(referral.referral.email, context=context)
@@ -212,8 +215,12 @@ def send_referral_email_notification(referral,recipients,request,reminder=False)
     _log_proposal_referral_email(msg, referral, sender=sender)
     if referral.proposal.org_applicant:
         _log_org_email(msg, referral.proposal.org_applicant, referral.referral, sender=sender)
+    elif referral.proposal.ind_applicant:
+        # TODO: implement logging
+        pass
+        # _log_user_email(msg, referral.proposal.ind_applicant, referral.referral, sender=sender)
     else:
-        _log_user_email(msg, referral.proposal.submitter, referral.referral, sender=sender)
+        pass
 
 
 def send_referral_complete_email_notification(referral,request):
@@ -241,6 +248,7 @@ def send_referral_complete_email_notification(referral,request):
         _log_org_email(msg, referral.proposal.org_applicant, referral.referral, sender=sender)
     else:
         _log_user_email(msg, referral.proposal.submitter, referral.referral, sender=sender)
+
 
 def send_amendment_email_notification(amendment_request, request, proposal):
     if proposal.is_filming_application:
@@ -275,6 +283,7 @@ def send_amendment_email_notification(amendment_request, request, proposal):
     else:
         _log_user_email(msg, proposal.submitter, proposal.submitter, sender=sender)
 
+
 def send_submit_email_notification(request, proposal):
     email = SubmitSendNotificationEmail()
     url = request.build_absolute_uri(reverse('internal-proposal-detail',kwargs={'proposal_pk': proposal.id}))
@@ -295,6 +304,7 @@ def send_submit_email_notification(request, proposal):
     #else:
     #    _log_user_email(msg, proposal.submitter, proposal.submitter, sender=sender)
     return msg
+
 
 def send_external_submit_email_notification(request, proposal):
     email = ExternalSubmitSendNotificationEmail()
@@ -467,6 +477,7 @@ def send_proposal_approval_email_notification(proposal,request):
     else:
         _log_user_email(msg, proposal.submitter, proposal.submitter, sender=sender)
 
+
 def send_proposal_awaiting_payment_approval_email_notification(proposal, request):
     """ Send External Email with attached invoice and URL link to pay by credit card """
     email = ProposalAwaitingPaymentApprovalSendNotificationEmail()
@@ -527,6 +538,7 @@ def send_district_proposal_submit_email_notification(district_proposal, request)
     else:
         _log_user_email(msg, proposal.submitter, proposal.submitter, sender=sender)
     return msg
+
 
 def send_district_proposal_approver_sendback_email_notification(request, district_proposal):
     proposal=district_proposal.proposal    
@@ -596,6 +608,7 @@ def send_district_approver_approve_email_notification(request, district_proposal
     else:
         _log_user_email(msg, proposal.submitter, proposal.submitter, sender=sender)
 
+
 def send_district_proposal_decline_email_notification(district_proposal,request,proposal_decline):
     email = DistrictProposalDeclineSendNotificationEmail()
     proposal=district_proposal.proposal
@@ -619,6 +632,7 @@ def send_district_proposal_decline_email_notification(district_proposal,request,
         _log_org_email(msg, proposal.org_applicant, proposal.submitter, sender=sender)
     else:
         _log_user_email(msg, proposal.submitter, proposal.submitter, sender=sender)
+
 
 def send_district_proposal_approval_email_notification(district_proposal,approval, request,):
     email = DistrictProposalApprovalSendNotificationEmail()
@@ -669,6 +683,7 @@ def send_district_proposal_approval_email_notification(district_proposal,approva
         _log_org_email(msg, proposal.org_applicant, proposal.submitter, sender=sender)
     else:
         _log_user_email(msg, proposal.submitter, proposal.submitter, sender=sender)
+
 
 def send_district_proposal_approval_email_notification_orig(district_proposal,approval,request):
 
@@ -743,7 +758,7 @@ def _log_proposal_referral_email(email_message, referral, sender=None):
     else:
         text = smart_text(email_message)
         subject = ''
-        to = proposal.applicant.email
+        to = referral.proposal.applicant.email
         fromm = smart_text(sender) if sender else SYSTEM_NAME
         all_ccs = ''
 
@@ -756,7 +771,7 @@ def _log_proposal_referral_email(email_message, referral, sender=None):
         'text': text,
         'proposal': referral.proposal,
         'customer': customer,
-        'staff': staff,
+        'staff': staff.id,
         'to': to,
         'fromm': fromm,
         'cc': all_ccs
@@ -765,6 +780,7 @@ def _log_proposal_referral_email(email_message, referral, sender=None):
     email_entry = ProposalLogEntry.objects.create(**kwargs)
 
     return email_entry
+
 
 def _log_proposal_email(email_message, proposal, sender=None, file_bytes=None, filename=None):
     from leaseslicensing.components.proposals.models import ProposalLogEntry
@@ -817,7 +833,6 @@ def _log_proposal_email(email_message, proposal, sender=None, file_bytes=None, f
         email_entry.documents.get_or_create(_file=path_to_file, name=filename)
 
     return email_entry
-
 
 
 def _log_org_email(email_message, organisation, customer ,sender=None):

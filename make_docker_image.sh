@@ -14,7 +14,8 @@ if [[ $# -gt 1 ]] && ! [[ $2 =~ ^[0-9]+$ ]]; then
 fi
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-REPO=$(basename -s .git `git config --get remote.origin.url` | sed 's/-//g')
+#REPO=$(basename -s .git `git config --get remote.origin.url` | sed 's/-//g')
+REPO=$(awk '{split($0, arr, "\/"); print arr[2]}' <<< $(git config -l|grep remote|grep url|head -n 1|sed 's/-//g'|sed 's/....$//'))
 DBCA_BRANCH="dbca_"$1
 BUILD_TAG_NO_INCREMENT=dbcawa/$REPO:$1_v$(date +%Y.%m.%d)
 if [[ $# -gt 1 ]]; then

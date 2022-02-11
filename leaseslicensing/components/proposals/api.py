@@ -358,7 +358,8 @@ class ProposalPaginatedViewSet(viewsets.ModelViewSet):
             qs = qs.filter(Q(assigned_officer=email_user_id_assigned) | Q(assigned_approver=email_user_id_assigned))
 
         self.paginator.page_size = qs.count()
-        result_page = self.paginator.paginate_queryset(qs.order_by('-id'), request)
+        # result_page = self.paginator.paginate_queryset(qs.order_by('-id'), request)
+        result_page = self.paginator.paginate_queryset(qs, request)
         serializer = ListProposalSerializer(result_page, context={'request': request}, many=True)
         return self.paginator.get_paginated_response(serializer.data)
 
@@ -1708,29 +1709,6 @@ class ProposalViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
-    @detail_route(methods=['post'], detail=True)
-    def assesor_send_referral(self, request, *args, **kwargs):
-        try:
-            instance = self.get_object()
-            serializer = SendReferralSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            #text=serializer.validated_data['text']
-            #instance.send_referral(request,serializer.validated_data['email'])
-            instance.send_referral(request,serializer.validated_data['email_group'], serializer.validated_data['text'])
-            serializer = InternalProposalSerializer(instance,context={'request':request})
-            return Response(serializer.data)
-        except serializers.ValidationError:
-            print(traceback.print_exc())
-            raise
-        except ValidationError as e:
-            if hasattr(e,'error_dict'):
-                raise serializers.ValidationError(repr(e.error_dict))
-            else:
-                if hasattr(e,'message'):
-                    raise serializers.ValidationError(e.message)
-        except Exception as e:
-            print(traceback.print_exc())
-            raise serializers.ValidationError(str(e))
 
     @detail_route(methods=['post'], detail=True)
     @renderer_classes((JSONRenderer,))
@@ -1754,19 +1732,40 @@ class ProposalViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
         raise serializers.ValidationError(str(e))
 
-
     @detail_route(methods=['post'], detail=True)
     @renderer_classes((JSONRenderer,))
     def assessor_save(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
-            save_assessor_data(instance,request,self)
+            save_assessor_data(instance, request, self)
             return redirect(reverse('external'))
         except serializers.ValidationError:
             print(traceback.print_exc())
             raise
         except ValidationError as e:
             raise serializers.ValidationError(repr(e.error_dict))
+        except Exception as e:
+            print(traceback.print_exc())
+            raise serializers.ValidationError(str(e))
+
+    @detail_route(methods=['post'], detail=True)
+    def assesor_send_referral(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            serializer = SendReferralSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            #text=serializer.validated_data['text']
+            #instance.send_referral(request,serializer.validated_data['email'])
+            instance.send_referral(request, serializer.validated_data['email'], serializer.validated_data['text'])
+            #serializer = InternalProposalSerializer(instance,context={'request':request})
+            serializer_class = self.internal_serializer_class()
+            serializer = serializer_class(instance, context={'request': request})
+            return Response(serializer.data)
+        except serializers.ValidationError:
+            print(traceback.print_exc())
+            raise
+        except ValidationError as e:
+            handle_validation_error(e)
         except Exception as e:
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
@@ -1838,7 +1837,8 @@ class ReferralViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated() and is_internal(self.request):
+        # if user.is_authenticated() and is_internal(self.request):
+        if user.is_authenticated and is_internal(self.request):
             #queryset =  Referral.objects.filter(referral=user)
             queryset =  Referral.objects.all()
             return queryset

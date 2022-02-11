@@ -36,6 +36,9 @@ from leaseslicensing.components.main.utils import get_dbca_lands_and_waters_geos
 
 
 import logging
+
+from leaseslicensing.settings import APPLICATION_TYPE_REGISTRATION_OF_INTEREST, APPLICATION_TYPE_LEASE_LICENCE
+
 logger = logging.getLogger(__name__)
 
 def create_data_from_form(schema, post_data, file_data, post_data_index=None,special_fields=[],assessor_data=False):
@@ -314,11 +317,13 @@ class SpecialFieldsSearch(object):
             item_data[item['name']] = item_data_list
         return item_data
 
+
 def save_proponent_data(instance,request,viewset,parks=None,trails=None):
     if instance.application_type.name==settings.APPLICATION_TYPE_REGISTRATION_OF_INTEREST:
         save_proponent_data_registration_of_interest(instance,request,viewset)
     elif instance.application_type.name==settings.APPLICATION_TYPE_LEASE_LICENCE:
         save_proponent_data_lease_licence(instance,request,viewset)
+
 
 def save_proponent_data_registration_of_interest(instance, request, viewset):
     # proposal
@@ -337,6 +342,7 @@ def save_proponent_data_registration_of_interest(instance, request, viewset):
     if viewset.action == 'submit':
         check_geometry(instance)
 
+
 def save_proponent_data_lease_licence(instance, request, viewset):
     # proposal
     proposal_data = request.data.get('proposal') if request.data.get('proposal') else {}
@@ -354,6 +360,17 @@ def save_proponent_data_lease_licence(instance, request, viewset):
     if viewset.action == 'submit':
         check_geometry(instance)
 
+
+def save_assessor_data_registration_of_interest(instance, request, viewset):
+    # TODO: implement
+    pass
+
+
+def save_assessor_data_lease_licence(instance, request, viewset):
+    # TODO: implement
+    pass
+
+
 def check_geometry(instance):
     geom_ok = True
     for geom in instance.proposalgeometry.all():
@@ -362,6 +379,7 @@ def check_geometry(instance):
 
     if not geom_ok:
         raise ValidationError('One or more polygons does not intersect with a relevant layer')
+
 
 def save_geometry(instance, request, viewset):
     # geometry
@@ -411,8 +429,6 @@ def save_geometry(instance, request, viewset):
     [poly.delete() for poly in polygons_to_delete]
 
 
-from leaseslicensing.components.main.models import ApplicationType
-
 def save_assessor_data(instance,request,viewset):
     with transaction.atomic():
         try:
@@ -424,66 +440,74 @@ def save_assessor_data(instance,request,viewset):
             #     'assessor_data': assessor_data,
             #     'comment_data': comment_data,
             # }
-            if instance.application_type.name==ApplicationType.FILMING:
-                save_assessor_data_filming(instance,request,viewset)
-            if instance.application_type.name==ApplicationType.TCLASS:
-                save_assessor_data_tclass(instance,request,viewset)
-            if instance.application_type.name==ApplicationType.EVENT:
-                save_assessor_data_event(instance,request,viewset)            
+            # if instance.application_type.name==ApplicationType.FILMING:
+            #     save_assessor_data_filming(instance,request,viewset)
+            # if instance.application_type.name==ApplicationType.TCLASS:
+            #     save_assessor_data_tclass(instance,request,viewset)
+            # if instance.application_type.name==ApplicationType.EVENT:
+            #     save_assessor_data_event(instance,request,viewset)
+            if instance.application_type.name == APPLICATION_TYPE_REGISTRATION_OF_INTEREST:
+                save_assessor_data_registration_of_interest(instance, request, viewset)
+            elif instance.application_type.name == APPLICATION_TYPE_LEASE_LICENCE:
+                save_assessor_data_lease_licence(instance, request, viewset)
+            else:
+                pass
         except:
             raise
 
+
 def proposal_submit(proposal,request):
-        with transaction.atomic():
-            if proposal.can_user_edit:
-                proposal.submitter = request.user.id
-                proposal.lodgement_date = timezone.now()
-                proposal.training_completed = True
-                if (proposal.amendment_requests):
-                    qs = proposal.amendment_requests.filter(status = "requested")
-                    if (qs):
-                        for q in qs:
-                            q.status = 'amended'
-                            q.save()
+    with transaction.atomic():
+        if proposal.can_user_edit:
+            proposal.submitter = request.user.id
+            proposal.lodgement_date = timezone.now()
+            proposal.training_completed = True
+            if (proposal.amendment_requests):
+                qs = proposal.amendment_requests.filter(status = "requested")
+                if (qs):
+                    for q in qs:
+                        q.status = 'amended'
+                        q.save()
 
-                # Create a log entry for the proposal
-                proposal.log_user_action(ProposalUserAction.ACTION_LODGE_APPLICATION.format(proposal.id),request)
-                # Create a log entry for the organisation
-                #proposal.applicant.log_user_action(ProposalUserAction.ACTION_LODGE_APPLICATION.format(proposal.id),request)
-                applicant_field=getattr(proposal, proposal.applicant_field)
-                ## 20220128 Ledger to handle EmailUser logging?
-                #applicant_field.log_user_action(ProposalUserAction.ACTION_LODGE_APPLICATION.format(proposal.id),request)
-                ## 20220128 - update ProposalAssessorGroup, ProposalApproverGroup as SystemGroups
-                ret1 = send_submit_email_notification(request, proposal)
-                ret2 = send_external_submit_email_notification(request, proposal)
+            # Create a log entry for the proposal
+            proposal.log_user_action(ProposalUserAction.ACTION_LODGE_APPLICATION.format(proposal.id),request)
+            # Create a log entry for the organisation
+            #proposal.applicant.log_user_action(ProposalUserAction.ACTION_LODGE_APPLICATION.format(proposal.id),request)
+            applicant_field=getattr(proposal, proposal.applicant_field)
+            ## 20220128 Ledger to handle EmailUser logging?
+            #applicant_field.log_user_action(ProposalUserAction.ACTION_LODGE_APPLICATION.format(proposal.id),request)
+            ## 20220128 - update ProposalAssessorGroup, ProposalApproverGroup as SystemGroups
+            ret1 = send_submit_email_notification(request, proposal)
+            ret2 = send_external_submit_email_notification(request, proposal)
 
-                #proposal.save_form_tabs(request)
-                if ret1 and ret2:
-                    proposal.processing_status = 'with_assessor'
-                    #TODO: do we need the following 2?
-                    #proposal.documents.all().update(can_delete=False)
-                    #proposal.required_documents.all().update(can_delete=False)
-                    proposal.save()
-                else:
-                    raise ValidationError('An error occurred while submitting proposal (Submit email notifications failed)')
-                #Create assessor checklist with the current assessor_list type questions
-                #Assessment instance already exits then skip.
-                #TODO: fix ProposalAssessment if still required
-                #try:
-                #    assessor_assessment=ProposalAssessment.objects.get(proposal=proposal,referral_group=None, referral_assessment=False)
-                #except ProposalAssessment.DoesNotExist:
-                #    assessor_assessment=ProposalAssessment.objects.create(proposal=proposal,referral_group=None, referral_assessment=False)
-                #    checklist=ChecklistQuestion.objects.filter(list_type='assessor_list', application_type=proposal.application_type, obsolete=False)
-                #    for chk in checklist:
-                #        try:
-                #            chk_instance=ProposalAssessmentAnswer.objects.get(question=chk, assessment=assessor_assessment)
-                #        except ProposalAssessmentAnswer.DoesNotExist:
-                #            chk_instance=ProposalAssessmentAnswer.objects.create(question=chk, assessment=assessor_assessment)
-
-                #return proposal
-
+            #proposal.save_form_tabs(request)
+            if ret1 and ret2:
+                proposal.processing_status = 'with_assessor'
+                #TODO: do we need the following 2?
+                #proposal.documents.all().update(can_delete=False)
+                #proposal.required_documents.all().update(can_delete=False)
+                proposal.save()
             else:
-                raise ValidationError('You can\'t edit this proposal at this moment')
+                raise ValidationError('An error occurred while submitting proposal (Submit email notifications failed)')
+            #Create assessor checklist with the current assessor_list type questions
+            #Assessment instance already exits then skip.
+            #TODO: fix ProposalAssessment if still required
+            proposal.make_questions_ready()
+            #try:
+            #    assessor_assessment=ProposalAssessment.objects.get(proposal=proposal,referral_group=None, referral_assessment=False)
+            #except ProposalAssessment.DoesNotExist:
+            #    assessor_assessment=ProposalAssessment.objects.create(proposal=proposal,referral_group=None, referral_assessment=False)
+            #    checklist=ChecklistQuestion.objects.filter(list_type='assessor_list', application_type=proposal.application_type, obsolete=False)
+            #    for chk in checklist:
+            #        try:
+            #            chk_instance=ProposalAssessmentAnswer.objects.get(question=chk, assessment=assessor_assessment)
+            #        except ProposalAssessmentAnswer.DoesNotExist:
+            #            chk_instance=ProposalAssessmentAnswer.objects.create(question=chk, assessment=assessor_assessment)
+
+            #return proposal
+
+        else:
+            raise ValidationError('You can\'t edit this proposal at this moment')
 
 
 def is_payment_officer(user):

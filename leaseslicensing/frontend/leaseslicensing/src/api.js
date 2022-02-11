@@ -13,6 +13,9 @@ module.exports = {
     fee_seasons_dict:"/api/fee_seasons_dict",
     compliance_statuses_dict:"/api/compliance_statuses_dict",
 
+    referrals:"/api/referrals.json",
+    department_users: '/api/department_users',
+
     profile: '/api/profile',
     submitter_profile: '/api/submitter_profile',
     organisations: '/api/organisations.json',
@@ -24,6 +27,7 @@ module.exports = {
     filtered_users: '/api/filtered_users',
     countries: '/api/countries',
 
+    proposals:"/api/proposal.json",
     proposals_paginated_list: '/api/proposal_paginated', // both for external and internal
     approvals_paginated_list: '/api/approval_paginated',
     compliances_paginated_external: '/api/compliance_paginated/list_external',

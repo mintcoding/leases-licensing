@@ -38,7 +38,7 @@
                 <label class="control-label pull-left">Will the proposal require exclusive use of or non-exclusive access to a site?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.exclusive_use" type="radio" name="exclusive_use_yes" id="exclusive_use_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="exclusive_use_yes">Yes</label>
@@ -84,7 +84,7 @@
                 <label class="control-label pull-left">Will the proposal require long-term use of or access to a site?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.long_term_use" type="radio" name="long_term_use_yes" id="long_term_use_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="long_term_use_yes">Yes</label>
@@ -131,7 +131,7 @@
                 <label class="control-label pull-left">Is the proposal consistent with the purpose of the park or reserve?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.consistent_purpose" type="radio" name="consistent_purpose_yes" id="consistent_purpose_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="consistent_purpose_yes">Yes</label>
@@ -183,7 +183,7 @@
                 <label class="control-label pull-left">Is the proposal consistent with the <a href="http://www.google.com" target="_blank">park or reserve management plan</a>?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.consistent_plan" type="radio" name="consistent_plan_yes" id="consistent_plan_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="consistent_plan_yes">Yes</label>
@@ -238,7 +238,7 @@
                 <label class="control-label pull-left">Will the proposal involve clearing of native vegetation?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.clearing_vegetation" type="radio" name="clearing_vegetation_yes" id="clearing_vegetation_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="clearing_vegetation_yes">Yes</label>
@@ -290,7 +290,7 @@
                 <label class="control-label pull-left">Will the proposal involve ground-disturbing works?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.ground_disturbing_works" type="radio" name="ground_disturbing_works_yes" id="ground_disturbing_works_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="ground_disturbing_works_yes">Yes</label>
@@ -342,7 +342,7 @@
                 <label class="control-label pull-left">Will the proposal impact on a World or National Heritage area?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.heritage_site" type="radio" name="heritage_site_yes" id="heritage_site_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="heritage_site_yes">Yes</label>
@@ -394,7 +394,7 @@
                 <label class="control-label pull-left">Is the proposal located in a environmentally sensitive area or habitat for significant flora and fauna?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.environmentally_sensitive" type="radio" name="environmentally_sensitive_yes" id="environmentally_sensitive_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="environmentally_sensitive_yes">Yes</label>
@@ -446,7 +446,7 @@
                 <label class="control-label pull-left">Will the proposal impact on wetlands or water courses?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.wetlands_impact" type="radio" name="wetlands_impact_yes" id="wetlands_impact_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="wetlands_impact_yes">Yes</label>
@@ -498,7 +498,7 @@
                 <label class="control-label pull-left">Will the proposal involve building a structure or building?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.building_required" type="radio" name="building_required_yes" id="building_required_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="building_required_yes">Yes</label>
@@ -550,7 +550,7 @@
                 <label class="control-label pull-left">Will the proposal create a significant change to or visual impact on the proposed site?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.significant_change" type="radio" name="significant_change_yes" id="significant_change_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="significant_change_yes">Yes</label>
@@ -602,7 +602,7 @@
                 <label class="control-label pull-left">Will the proposal impact on a <a target="_blank" href="http://www.google.com">registered Aboriginal site</a>?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.aboriginal_site" type="radio" name="aboriginal_site_yes" id="aboriginal_site_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="aboriginal_site_yes">Yes</label>
@@ -654,7 +654,7 @@
                 <label class="control-label pull-left">Has any consultation occurred with the relevant Aboriginal native title party?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.native_title_consultation" type="radio" name="native_title_consultation_yes" id="native_title_consultation_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="native_title_consultation_yes">Yes</label>
@@ -706,7 +706,7 @@
                 <label class="control-label pull-left">Will the proposal impact on a <a target="_blank" href="http://google.com">mining tenement</a>?</label>
             </div>
             <div class="col-sm-9">
-                <ul  class="list-inline col-sm-6">
+                <ul  class="list-inline col-sm-9">
                     <li class="list-inline-item">
                         <input class="form-check-input" v-model="proposal.mining_tenement" type="radio" name="mining_tenement_yes" id="mining_tenement_yes" :value="true" data-parsley-required :disabled="readonly"/>
                         <label for="mining_tenement_yes">Yes</label>

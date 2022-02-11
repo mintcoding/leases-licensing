@@ -2,7 +2,7 @@ from django import forms
 from django.db import models
 from django.forms import Textarea
 from django.utils.safestring import mark_safe
-from leaseslicensing.components.proposals.models import HelpPage, SectionChecklistQuestions
+from leaseslicensing.components.proposals.models import HelpPage, SectionChecklist
 from leaseslicensing.components.main.models import SystemMaintenance
 from ckeditor.widgets import CKEditorWidget
 from django.conf import settings
@@ -18,13 +18,13 @@ class LeasesLicensingHelpPageAdminForm(forms.ModelForm):
         fields = '__all__'
 
 
-class SectionChecklistQuestionsForm(forms.ModelForm):
+class SectionChecklistForm(forms.ModelForm):
     class Meta:
-        model = SectionChecklistQuestions
+        model = SectionChecklist
         fields = '__all__'
 
     def clean(self):
-        cleaned_data = super(SectionChecklistQuestionsForm, self).clean()
+        cleaned_data = super(SectionChecklistForm, self).clean()
         if cleaned_data['enabled'] is False:
             # We don't mind any disabled record
             return cleaned_data
@@ -38,7 +38,7 @@ class SectionChecklistQuestionsForm(forms.ModelForm):
         cleaned_enabled = cleaned_data.get('enabled', None)
 
         # Check if there is alreay a set of questions for the section
-        existings = SectionChecklistQuestions.objects.filter(
+        existings = SectionChecklist.objects.filter(
             application_type=cleaned_application_type,
             section=cleaned_section,
             list_type=cleaned_list_type,

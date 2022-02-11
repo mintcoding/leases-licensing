@@ -68,10 +68,10 @@ class DefaultDataManager(object):
                 logger.error('{}, Key: {}'.format(e, item[0]))
 
         # ProposalAssessorGroup
-        group, created = SystemGroup.objects.get_or_create(name="ProposalAssessorGroup")
+        group, created = SystemGroup.objects.get_or_create(name=settings.GROUP_NAME_ASSESSOR)
 
         # ProposalApproverGroup
-        group, created = SystemGroup.objects.get_or_create(name="ProposalApproverGroup")
+        group, created = SystemGroup.objects.get_or_create(name=settings.GROUP_NAME_APPROVER)
 
         ## Oracle account codes
         #today = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)).date()

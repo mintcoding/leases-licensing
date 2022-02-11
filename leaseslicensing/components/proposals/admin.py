@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.template.response import TemplateResponse
 from django.http import HttpResponse, HttpResponseRedirect
 
-from leaseslicensing.components.proposals.forms import SectionChecklistQuestionsForm
+from leaseslicensing.components.proposals.forms import SectionChecklistForm
 from leaseslicensing.components.proposals.models import ChecklistQuestion
 from leaseslicensing.utils import create_helppage_object
 # Register your models here.
@@ -41,6 +41,7 @@ class AmendmentReasonAdmin(admin.ModelAdmin):
 @admin.register(models.Proposal)
 #class ProposalAdmin(VersionAdmin):
 class ProposalAdmin(admin.ModelAdmin):
+    list_display = ['lodgement_number', 'application_type', 'proposal_type', 'processing_status', 'submitter', 'assigned_officer', 'applicant']
     inlines =[ProposalDocumentInline,]
 
 @admin.register(models.ProposalStandardRequirement)
@@ -81,13 +82,15 @@ class ChecklistQuestionInline(admin.TabularInline):
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 60})},
     }
+    fields = ['text', 'answer_type', 'enabled', 'shown_to_others', 'order',]
 
-@admin.register(models.SectionChecklistQuestions)
-class SectionChecklistQuestionsAdmin(admin.ModelAdmin):
-    list_display = ['application_type_name', 'section_name', 'list_type_name', 'enabled', 'number_of_questions']
+
+@admin.register(models.SectionChecklist)
+class SectionChecklistAdmin(admin.ModelAdmin):
+    list_display = ['list_type_name', 'application_type_name', 'section_name', 'enabled', 'number_of_questions']
     list_filter = ['application_type', 'section', 'list_type', 'enabled',]
     inlines = [ChecklistQuestionInline,]
-    form = SectionChecklistQuestionsForm
+    form = SectionChecklistForm
 
     def application_type_name(self, obj):
         return obj.application_type.get_name_display()
