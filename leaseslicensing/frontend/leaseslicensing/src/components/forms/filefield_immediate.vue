@@ -353,7 +353,6 @@ export default {
         display: none !important;
     }
     .ffu-input-text {
-        color: #337ab7;
         cursor: pointer;
     }
     .ffu-input-text:hover {

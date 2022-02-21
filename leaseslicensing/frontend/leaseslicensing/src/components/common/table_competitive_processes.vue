@@ -626,7 +626,6 @@ export default {
     line-height: 14px;
     content: '+';
     color: white;
-    background-color: #337ab7;
     display: inline-block;
     box-shadow: 0px 0px 3px #444;
     box-sizing: content-box;
