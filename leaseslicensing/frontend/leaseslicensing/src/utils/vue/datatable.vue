@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
    <div id="DataTable">
       <table class="hover table border table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%" :id="id">
             <thead>
@@ -16,7 +16,8 @@
     
     //import {$, DataTableBs} from '../../hooks'
     //import ResponsiveDatatablesHelper from "../responsive_datatable_helper.js"
-module.exports = {
+//module.exports = {
+export default {
    name : 'DataTable',
    props:{
       dtHeaders:{

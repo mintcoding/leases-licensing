@@ -1,4 +1,5 @@
-module.exports = {
+//module.exports = {
+export default {
 	APPLICATION_TYPE: {
 		REGISTRATION_OF_INTEREST: 'registration_of_interest',
 		LEASE_LICENCE: 'lease_licence',

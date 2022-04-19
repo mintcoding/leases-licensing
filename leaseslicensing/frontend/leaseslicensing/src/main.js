@@ -17,9 +17,10 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 import axios from 'axios';
 //import("./scss/custom.scss");
 //require('../node_modules/font-awesome/css/font-awesome.min.css' )
-require('@/../node_modules/@fortawesome/fontawesome-free/css/all.min.css')
-require('@/../node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css')
-require('@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css')
+import '@/../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+import '@/../node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css';
+import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import "@/../node_modules/select2/dist/css/select2.min.css";
 //require('@/../node_modules/datatables.net-bs/css/dataTables.bootstrap.min.css')
 
 /*

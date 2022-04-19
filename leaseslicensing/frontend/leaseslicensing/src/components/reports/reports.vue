@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <div class="container">
     <div id="report-form">
         <form  method="get" id="payments-form" action="/ledger/payments/api/report">

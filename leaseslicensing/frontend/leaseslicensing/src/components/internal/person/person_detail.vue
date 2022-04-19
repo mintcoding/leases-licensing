@@ -62,8 +62,8 @@
 <script>
 import FormSection from "@/components/forms/section_toggle.vue"
 import Applicant from '@/components/common/applicant.vue'
-import ApplicationsTable from "@/components/common/table_proposals"
-import CompliancesTable from "@/components/common/table_compliances"
+import ApplicationsTable from "@/components/common/table_proposals.vue"
+import CompliancesTable from "@/components/common/table_compliances.vue"
 import { api_endpoints, helpers, constants } from '@/utils/hooks'
 import CommsLogs from '@common-utils/comms_logs.vue'
 

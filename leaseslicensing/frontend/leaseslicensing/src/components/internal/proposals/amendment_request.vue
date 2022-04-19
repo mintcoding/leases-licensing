@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div id="internal-proposal-amend">
         <modal transition="modal fade" @ok="ok()" @cancel="cancel()" title="Amendment Request" large>
             <div class="container-fluid">

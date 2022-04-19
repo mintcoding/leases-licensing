@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div>
     <div v-if="debug">components/form_registration_of_interest.vue</div>
     <FormSection label="Proposal Details" Index="application_details" v-if="proposal">

@@ -1,4 +1,5 @@
-module.exports = {
+//module.exports = {
+export default {
     formatError: function(err) {
         let returnStr = '';
         // object {}

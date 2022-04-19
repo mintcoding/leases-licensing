@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div id="internal-compliance-amend">
         <modal transition="modal fade" @ok="ok()" @cancel="cancel()" title="Amendment Request" large>
             <div class="container-fluid">
@@ -34,7 +34,6 @@
 
 <script>
 //import $ from 'jquery'
-import Vue from 'vue'
 import modal from '@vue-utils/bootstrap-modal.vue'
 import alert from '@vue-utils/alert.vue'
 

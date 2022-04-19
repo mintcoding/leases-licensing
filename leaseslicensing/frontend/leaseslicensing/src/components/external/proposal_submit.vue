@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div class="container" >
         <div class="row">
             <div class="col-sm-12">
@@ -37,7 +37,6 @@
     </div>
 </template>
 <script>
-import Vue from 'vue'
 import {
   api_endpoints,
   helpers

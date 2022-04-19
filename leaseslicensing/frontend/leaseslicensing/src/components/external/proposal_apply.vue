@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div class="container" >
         <!--button type="button" @click="createML">Mooring Licence Application</button-->
         <div class="row" v-if="applicationsLoading">
@@ -44,7 +44,6 @@
     </div>
 </template>
 <script>
-import Vue from 'vue'
 import FormSection from '@/components/forms/section_toggle.vue'
 //require('bootstrap/dist/css/bootstrap.css')
 import {

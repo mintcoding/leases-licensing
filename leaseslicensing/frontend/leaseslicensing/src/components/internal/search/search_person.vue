@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <FormSection label="Search Person" Index="search_person">
         <div class="row form-group">
                 <label for="person_lookup" class="col-sm-3 control-label">Person</label>
@@ -25,8 +25,8 @@
 
 <script>
 import FormSection from '@/components/forms/section_toggle.vue'
-var select2 = require('select2');
-require("select2/dist/css/select2.min.css");
+//import select2 from 'select2';
+//import "select2/dist/css/select2.min.css";
 //require("select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css");
 import {
   api_endpoints,

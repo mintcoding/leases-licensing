@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div>
     <div v-if="debug">components/form_lease_licence.vue</div>
     <FormSection label="Tourism Proposal Details" Index="tourism_proposal_details" v-if="proposal">

@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <!--div class="accordion" :id="custom_id">
       <div class="accordion-item">
         <div class="accordion-header" :id="section_header_id">

@@ -68,13 +68,13 @@
 
 <script>
 import datatable from '@/utils/vue/datatable.vue'
-import OfferMooringLicence from '@/components/internal/approvals/offer_mooring_licence.vue'
 import ApprovalCancellation from '../internal/approvals/approval_cancellation.vue'
 import ApprovalSuspension from '../internal/approvals/approval_suspension.vue'
 import ApprovalSurrender from '../internal/approvals/approval_surrender.vue'
 import ApprovalHistory from '../internal/approvals/approval_history.vue'
 import { api_endpoints, helpers }from '@/utils/hooks'
 import CollapsibleFilters from '@/components/forms/collapsible_component.vue'
+import axios from 'axios';
 
 export default {
     name: 'TableApprovals',
@@ -140,7 +140,6 @@ export default {
     },
     components:{
         datatable,
-        OfferMooringLicence,
         ApprovalCancellation,
         ApprovalSuspension,
         ApprovalSurrender,

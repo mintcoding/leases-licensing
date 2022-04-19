@@ -125,10 +125,10 @@ import 'select2/dist/css/select2.min.css'
 import 'select2-bootstrap-theme/dist/select2-bootstrap.min.css'
 */
 import MeasureStyles, { formatLength } from '@/components/common/measure.js'
-require("select2/dist/css/select2.min.css");
+//import "select2/dist/css/select2.min.css";
 //require("select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css");
 import RangeSlider from '@/components/forms/range_slider.vue'
-const axios = require('axios').default;
+import axios from 'axios';
 
 export default {
     name: 'MapComponentWithFilters',

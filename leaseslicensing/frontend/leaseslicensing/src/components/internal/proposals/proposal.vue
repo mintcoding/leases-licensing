@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div v-if="proposal" class="container" id="internalProposal">
         <div v-if="debug">internal/proposals/proposal.vue</div>
         <div class="row">
@@ -263,7 +263,7 @@ import ApplicationForm from '@/components/form.vue';
 import FormSection from "@/components/forms/section_toggle.vue"
 import CollapsibleQuestions from '@/components/forms/collapsible_component.vue'
 import ChecklistQuestion from '@/components/common/component_checklist_question.vue'
-require("select2/dist/css/select2.min.css");
+//import "select2/dist/css/select2.min.css";
 
 export default {
     name: 'InternalProposal',

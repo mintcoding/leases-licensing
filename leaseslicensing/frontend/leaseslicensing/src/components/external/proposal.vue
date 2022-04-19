@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div class="container" >
         <div v-if="!proposal_readonly">
           <div v-if="hasAmendmentRequest" class="row" style="color:red;">

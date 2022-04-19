@@ -74,7 +74,7 @@
 
 <script>
 import datatable from '@/utils/vue/datatable.vue'
-import Vue from 'vue'
+import axios from 'axios';
 import { api_endpoints, helpers }from '@/utils/hooks'
 import CollapsibleFilters from '@/components/forms/collapsible_component.vue'
 //import '@/components/common/filters.css'

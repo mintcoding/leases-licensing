@@ -27,11 +27,15 @@ export default defineConfig({
     plugins: [vue()],
     resolve: {
         alias: {
-            "@": path.resolve(__dirname, "./src"),
+            '@': path.resolve(__dirname, "./src"),
             '@vue-utils': path.resolve(__dirname, 'src/utils/vue'),
             '@common-utils':  path.resolve(__dirname, 'src/components/common/'),
             'datetimepicker': 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-            'easing': 'jquery.easing/jquery.easing.js',
+            '$': "jquery",
+            'select2': "../node_modules/select2/dist/js/select2.full.min.js",
+            'moment': "moment",
+            'swal': 'sweetalert2',
+            '_': 'lodash',
         },
     },
     /*

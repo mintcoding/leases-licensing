@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div :class="headerCSS">
         <!--label :id="id" :num_files="numDocuments">{{label}}</label-->
         <!--template v-if="files"-->
