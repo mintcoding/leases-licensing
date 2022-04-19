@@ -6,11 +6,12 @@ console.log(process.env.NODE_ENV)
 console.log("dev")
 //import { createApp } from 'vue/dist/vue.esm-browser.js'
 import { createApp } from 'vue'
-import { Resource } from 'vue-resource'
+//import { Resource } from 'vue-resource'
 import { router } from './router'
-import App from './App'
+import App from './App.vue'
 import helpers from '@/utils/helpers'
-import hooks from './packages'
+//import hooks from '@/utils/hooks'
+//import hooks from './packages'
 import api_endpoints from './api'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import axios from 'axios';
@@ -44,11 +45,11 @@ axios.interceptors.request.use( function ( config ) {
 
 /* eslint-disable no-new */
 const app = createApp(App)
-
+app.config.globalProperties.$axios = axios;
 app.use(CKEditor)
 console.log("router")
 app.use(router)
-app.use(Resource)
+//app.use(Resource)
 router.isReady().then(() => app.mount('#app'))
 //app.mount('#app')
 

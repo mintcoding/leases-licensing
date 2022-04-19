@@ -1,7 +1,7 @@
-var path = require('path')
-var webpack = require('webpack');
-const axios = require('axios').default;
-//import helpers from 'src/utils/helpers'
+const path = require('path')
+//const axios = require('axios').default;
+import { defineConfig } from "vite";
+import vue from '@vitejs/plugin-vue';
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -23,7 +23,18 @@ if ( document.cookie && document.cookie !== '' ) {
 return value;
 }
 
-module.exports = {
+export default defineConfig({
+    plugins: [vue()],
+    resolve: {
+        alias: {
+            "@": path.resolve(__dirname, "./src"),
+            '@vue-utils': path.resolve(__dirname, 'src/utils/vue'),
+            '@common-utils':  path.resolve(__dirname, 'src/components/common/'),
+            'datetimepicker': 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+            'easing': 'jquery.easing/jquery.easing.js',
+        },
+    },
+    /*
     chainWebpack: config => {
         config.resolve.alias.set('@vue-utils', path.resolve(__dirname, 'src/utils/vue'));
         config.resolve.alias.set('@common-utils', path.resolve(__dirname, 'src/components/common/'));
@@ -50,4 +61,6 @@ module.exports = {
             //proxy: "http://api.back.end",
         }
     }
-};
+    */
+});
+
