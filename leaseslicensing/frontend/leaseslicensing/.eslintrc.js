@@ -2,7 +2,7 @@
 module.exports = {
       root: true,
       env: {
-              es2021: true,
+              es2015: true,
             },
       extends: ["plugin:vue/essential", "eslint:recommended", "@vue/prettier"],
       rules: {

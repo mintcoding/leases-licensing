@@ -1,70 +1,44 @@
+//import { fileURLToPath, URL } from 'url'
+
 const path = require('path')
-//const axios = require('axios').default;
-import { defineConfig } from "vite";
-import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import AutoImport from 'unplugin-auto-import/vite'
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 
-function resolve (dir) {
-  return path.join(__dirname, '..', dir)
-}
-
-function getCookie ( name ) {
-var value = null;
-if ( document.cookie && document.cookie !== '' ) {
-  var cookies = document.cookie.split( ';' );
-  for ( var i = 0; i < cookies.length; i++ ) {
-    var cookie = cookies[ i ].trim();
-    if ( cookie.substring( 0, name.length + 1 )
-      .trim() === ( name + '=' ) ) {
-      value = decodeURIComponent( cookie.substring( name.length + 1 ) );
-      break;
-    }
-  }
-}
-return value;
-}
-
+// https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [vue()],
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, "./src"),
-            '@vue-utils': path.resolve(__dirname, 'src/utils/vue'),
-            '@common-utils':  path.resolve(__dirname, 'src/components/common/'),
-            'datetimepicker': 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-            '$': "jquery",
-            'select2': "../node_modules/select2/dist/js/select2.full.min.js",
-            'moment': "moment",
-            'swal': 'sweetalert2',
-            '_': 'lodash',
-        },
-    },
-    /*
-    chainWebpack: config => {
-        config.resolve.alias.set('@vue-utils', path.resolve(__dirname, 'src/utils/vue'));
-        config.resolve.alias.set('@common-utils', path.resolve(__dirname, 'src/components/common/'));
-        config.resolve.alias.set('datetimepicker','eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
-        config.resolve.alias.set('easing','jquery.easing/jquery.easing.js');
-    },
-    configureWebpack: {
-        plugins:[
-            new webpack.ProvidePlugin({
-               axios: "axios",
-               $: "jquery",
-               jQuery: "jquery",
-               "select2": "../node_modules/select2/dist/js/select2.full.min.js",
-               moment: "moment",
-               swal: 'sweetalert2',
-               _: 'lodash',
-               datetimepicker:"../node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"
-           })
-        ],
-        devServer: {
-            //headers: { "Access-Control-Allow_origin": "*" },
-            //headers: { 'X-CSRFToken': getCookie( 'csrftoken' ) },
-            proxy: "http://localhost:8080",
-            //proxy: "http://api.back.end",
-        }
+  plugins: [
+      vue(),
+        AutoImport({
+            imports: [
+                {
+                    'axios': [
+                        ['default', 'axios'],
+                    ],
+                }
+            ]
+        }),
+  ],
+  resolve: {
+    alias: {
+      //'@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': path.resolve(__dirname, "./src"),
+      '@vue-utils': path.resolve(__dirname, 'src/utils/vue'),
+      '@common-utils':  path.resolve(__dirname, 'src/components/common/'),
     }
-    */
-});
-
+  },
+    /*
+  build: {
+      rollupOptions: {
+          plugins: [commonjs(), resolve(), ],
+          input: 'src/main.js',
+          output: {
+              dir: 'dist',
+              format: 'cjs',
+          },
+      },
+  },
+  */
+})

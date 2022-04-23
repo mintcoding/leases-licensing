@@ -17,6 +17,12 @@
     //import {$, DataTableBs} from '../../hooks'
     //import ResponsiveDatatablesHelper from "../responsive_datatable_helper.js"
 //module.exports = {
+//import $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs5';
+import 'datatables.net-responsive-bs';
+import 'datatables.net-buttons';
+import $ from 'jquery';
 export default {
    name : 'DataTable',
    props:{
@@ -77,8 +83,10 @@ export default {
        }
    },
    mounted:function () {
+      console.log($);
       let vm = this;
       vm.table =$('#'+vm.id);
+      console.log($.fn);
       $.fn.dataTable.ext.errMode = 'throw';
       // $.fn.dataTable.ext.classes.sPageButton = 'page-link page-item';
       vm.initEvents();
