@@ -75,9 +75,7 @@
 import datatable from '@/utils/vue/datatable.vue'
 import { api_endpoints, helpers } from '@/utils/hooks'
 import CollapsibleFilters from '@/components/forms/collapsible_component.vue'
-import axios from 'axios'
 import { v4 as uuid } from 'uuid';
-//const axios = require('axios').default;
 
 export default {
     name: 'TableApplications',
@@ -515,7 +513,10 @@ export default {
                 confirmButtonText: 'Discard Application',
                 confirmButtonColor:'#dc3545'
             }).then(() => {
-                axios.delete(api_endpoints.discard_proposal(proposal_id))
+                fetch(api_endpoints.discard_proposal(proposal_id),
+                    {
+                        method: 'delete',
+                    })
                 .then((response) => {
                     swal(
                         'Discarded',
@@ -534,17 +535,18 @@ export default {
             let vm = this;
 
             // Application Types
-            axios.get(api_endpoints.application_types_dict+'?apply_page=False').then((response) => {
-                vm.application_types = response.body
+            fetch(api_endpoints.application_types_dict+'?apply_page=False').then((response) => {
+                vm.application_types = response.json()
             },(error) => {
             })
 
             // Application Statuses
-            axios.get(api_endpoints.application_statuses_dict).then((response) => {
+            fetch(api_endpoints.application_statuses_dict).then((response) => {
+                console.log(response)
                 if (vm.is_internal){
-                    vm.application_statuses = response.body.internal_statuses
+                    vm.application_statuses = response.json().internal_statuses
                 } else {
-                    vm.application_statuses = response.body.external_statuses
+                    vm.application_statuses = response.json().external_statuses
                 }
             },(error) => {
             })

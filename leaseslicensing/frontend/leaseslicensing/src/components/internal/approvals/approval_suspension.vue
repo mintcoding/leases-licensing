@@ -91,7 +91,7 @@ export default {
             approval_id: Number,
             state: 'proposed_approval',
             issuingApproval: false,
-            validation_form: null,
+            //validation_form: null,
             errors: false,
             errorString: '',
             successString: '',
@@ -117,10 +117,12 @@ export default {
     methods:{
         ok:function () {
             let vm =this;
+            vm.sendData();
+            /*
             if($(vm.form).valid()){
-                vm.sendData();
 
             }
+            */
         },
         cancel:function () {
             this.close()
@@ -134,7 +136,7 @@ export default {
             $('.has-error').removeClass('has-error');
             $(this.$refs.from_date).data('DateTimePicker').clear();
             $(this.$refs.to_date).data('DateTimePicker').clear();
-            this.validation_form.resetForm();
+            //this.validation_form.resetForm();
         },
         fetchContact: function(id){
             let vm = this;
@@ -174,6 +176,7 @@ export default {
 
 
         },
+        /*
         addFormValidations: function() {
             let vm = this;
             vm.validation_form = $(vm.form).validate({
@@ -204,6 +207,7 @@ export default {
                 }
             });
        },
+       */
        eventListeners:function () {
             let vm = this;
             // Initialise Date Picker
@@ -234,7 +238,7 @@ export default {
    mounted:function () {
         let vm =this;
         vm.form = document.forms.approvalForm;
-        vm.addFormValidations();
+        //vm.addFormValidations();
         this.$nextTick(()=>{
             vm.eventListeners();
         });

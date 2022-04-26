@@ -25,12 +25,10 @@ axios.interceptors.request.use( function ( config ) {
   }
 } );
 */
-console.log(axios)
 /* eslint-disable no-new */
 const app = createApp(App)
 app.config.globalProperties.$axios = axios;
 app.use(CKEditor)
-console.log("router")
 app.use(router)
 router.isReady().then(() => app.mount('#app'))
 

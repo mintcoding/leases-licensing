@@ -19,29 +19,27 @@
 <html lang="en">
     <body>
         {% block header_top_menu %}
+        css  {{ vite_css }}
         {% endblock %}
         {% block extra_css %}
-            <link rel="stylesheet" href="{% static 'leaseslicensing_vue/css/app.css' %}?v={{build_tag}}">
+        <link rel="stylesheet" href="{% static vite_css %}?v={{build_tag}}">
         {% endblock %}
         {% block custom_js %}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+            <!--script type="module" src="node_modules/jquery/dist/jquery.min.js"></script>
+            <script type="module" src="node_modules/datatables.net/js/jquery.dataTables.min.js"></script-->
             <script language="javascript">
                     var env = {
                         "kmi_server_url": "{{ KMI_SERVER_URL }}"
                     }
 
             </script>
-            {% if not dev %}
-                <script type="text/javascript" src="{% static 'leaseslicensing_vue/js/manifest.js' %}?v={{build_tag}}"></script>
-                <script type="text/javascript" src="{% static 'leaseslicensing_vue/js/vendor.js' %}?v={{build_tag}}"></script>
-                    {% if app_build_url %}
-                        <script type="text/javascript" src="{{ app_build_url }}"></script>
-                    {% else %}
-                        <script type="text/javascript" src="{% static 'leaseslicensing_vue/js/app.js' %}?v={{build_tag}}"></script>
-                    {% endif %}
+            {% if app_build_url %}
+                <script type="module" src="{{ app_build_url }}"></script>
             {% else %}
-                <script type="text/javascript" src="{{ dev_url }}"></script>
+    <script type="text/javascript" src="{% static vite_file %}?v={{build_tag}}"></script>
             {% endif %}
-      
 
         {% endblock %}
         {% block menu_spacer %}

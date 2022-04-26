@@ -1,5 +1,7 @@
 from confy import env
 from django.conf import settings
+import json
+import os
 #from ledger.payments.helpers import is_payment_admin
 
 from leaseslicensing.settings import (
@@ -8,6 +10,30 @@ from leaseslicensing.settings import (
         template_title,
         BUILD_TAG,
         )
+
+vite_manifest = None
+#import ipdb; ipdb.set_trace()
+with open(os.path.join(settings.BASE_DIR, 'staticfiles_ll/leaseslicensing_vue/manifest.json'), mode='r', encoding='utf-8') as manifest_file:
+    vite_manifest = json.loads(manifest_file.read())
+
+vite_static_root = os.path.join('leaseslicensing_vue', 'assets')
+
+print(vite_manifest)
+#vite_vendor = str(os.path.join(vite_static_root, vite_manifest.get("src/main.js").get("imports")[0][1:]))
+#vite_css = str(os.path.join(vite_static_root, vite_manifest.get("src/main.js").get("css")[0].replace('assets/','')))
+#vite_file = str(os.path.join(vite_static_root, vite_manifest.get("src/main.js").get("file").replace('assets/','')))
+
+#vite_vendor = str(os.path.join(vite_static_root, vite_manifest.get("index.html").get("imports")[0][1:]))
+vite_css = str(os.path.join(vite_static_root, vite_manifest.get("index.html").get("css")[0].replace('assets/','')))
+vite_file = str(os.path.join(vite_static_root, vite_manifest.get("index.html").get("file").replace('assets/','')))
+
+#vite_vendor_tag = '{% static "' + vite_vendor + '" %}'
+#vite_css_tag = '{% static "' + vite_css + '" %}'
+#vite_file_tag = '{% static "' + vite_file + '" %}'
+#
+#print(vite_vendor_tag)
+#print(vite_css_tag)
+#print(vite_file_tag)
 
 def leaseslicensing_url(request):
     #if settings.DOMAIN_DETECTED == 'apiary':
@@ -38,4 +64,7 @@ def leaseslicensing_url(request):
         'template_group': template_group,
         'template_title': template_title,
         'build_tag': BUILD_TAG,
+        #'vite_vendor': vite_vendor,
+        'vite_css': vite_css,
+        'vite_file': vite_file,
     }

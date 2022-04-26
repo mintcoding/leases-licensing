@@ -3,6 +3,7 @@ import os
 import datetime
 import base64
 import geojson
+import json
 from six.moves.urllib.parse import urlparse
 from wsgiref.util import FileWrapper
 from django.db.models import Q, Min

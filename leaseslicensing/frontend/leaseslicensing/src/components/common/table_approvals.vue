@@ -74,7 +74,6 @@ import ApprovalSurrender from '../internal/approvals/approval_surrender.vue'
 import ApprovalHistory from '../internal/approvals/approval_history.vue'
 import { api_endpoints, helpers }from '@/utils/hooks'
 import CollapsibleFilters from '@/components/forms/collapsible_component.vue'
-import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 
 export default {
@@ -486,9 +485,13 @@ export default {
         },
         sendData: function(params){
             let vm = this
-            axios.post(helpers.add_endpoint_json(api_endpoints.approvals, params.approval_id + '/request_new_stickers'), params).then(
+            fetch(helpers.add_endpoint_json(api_endpoints.approvals, params.approval_id + '/request_new_stickers'), 
+                {
+                    method: 'post',
+                    body: params,
+                }).then(
                 res => {
-                    helpers.post_and_redirect('/sticker_replacement_fee/', {'csrfmiddlewaretoken' : vm.csrf_token, 'data': JSON.stringify(res.body)});
+                    helpers.post_and_redirect('/sticker_replacement_fee/', {'csrfmiddlewaretoken' : vm.csrf_token, 'data': JSON.stringify(res.json())});
                 },
                 err => {
                     console.log(err)
@@ -497,8 +500,8 @@ export default {
         },
         fetchProfile: function(){
             let vm = this;
-            axios.get(api_endpoints.profile).then((response) => {
-                vm.profile = response.body
+            fetch(api_endpoints.profile).then((response) => {
+                vm.profile = response.json()
 
             },(error) => {
                 console.log(error);
@@ -646,8 +649,10 @@ export default {
         },
         fetchFilterLists: async function(){
             // Status values
-            const statusRes = await axios.get(api_endpoints.approval_statuses_dict);
-            for (let s of statusRes.body) {
+            const statusRes = await fetch(api_endpoints.approval_statuses_dict);
+            const statusData = await statusRes.json()
+            console.log(statusData)
+            for (let s of statusData) {
                 if (this.wlaDash && !(['extended', 'awaiting_payment', 'approved'].includes(s.code))) {
                     this.statusValues.push(s);
                 //} else if (!(['extended', 'awaiting_payment', 'offered', 'approved'].includes(s.code))) {
@@ -668,9 +673,16 @@ export default {
                 confirmButtonText: 'Reissue approval',
                 //confirmButtonColor:'#d9534f'
             }).then(() => {
-                axios.post(helpers.add_endpoint_json(api_endpoints.proposal,(proposal_id+'/reissue_approval')),JSON.stringify(data),{
+                fetch(helpers.add_endpoint_json(api_endpoints.proposal,(proposal_id+'/reissue_approval')),
+                    { 
+                        method: 'post',
+                        body: JSON.stringify(data)
+                    })
+                /*
+                    ,{
                 emulateJSON:true,
                 })
+                */
                 .then((response) => {
 
                     vm.$router.push({
@@ -702,9 +714,10 @@ export default {
                 confirmButtonText: 'Reinstate approval',
                 //confirmButtonColor:'#d9534f'
             }).then(() => {
-                axios.post(helpers.add_endpoint_json(api_endpoints.approvals,(approval_id+'/approval_reinstate')),{
-
-                })
+                fetch(helpers.add_endpoint_json(api_endpoints.approvals,(approval_id+'/approval_reinstate')),
+                    {
+                method: 'post',
+                    })
                 .then((response) => {
                     swal(
                         'Reinstate',
@@ -762,8 +775,8 @@ export default {
                 showCancelButton: true,
                 confirmButtonText: 'Renew approval',
             }).then(() => {
-                axios.post(helpers.add_endpoint_json(api_endpoints.proposal,(proposal_id+'/renew_amend_approval_wrapper')) + '?debug=' + vm.debug + '&type=renew', {
-
+                fetch(helpers.add_endpoint_json(api_endpoints.proposal,(proposal_id+'/renew_amend_approval_wrapper')) + '?debug=' + vm.debug + '&type=renew', {
+                    method: 'post',
                 })
                 .then((response) => {
                    let proposal = {}
@@ -795,8 +808,8 @@ export default {
                 showCancelButton: true,
                 confirmButtonText: 'Amend approval',
             }).then(() => {
-                axios.post(helpers.add_endpoint_json(api_endpoints.proposal,(proposal_id+'/renew_amend_approval_wrapper')) + '?debug=' + vm.debug + '&type=amend', {
-
+                fetch(helpers.add_endpoint_json(api_endpoints.proposal,(proposal_id+'/renew_amend_approval_wrapper')) + '?debug=' + vm.debug + '&type=amend', {
+                    method: 'post',
                 })
                 .then((response) => {
                    let proposal = {}
