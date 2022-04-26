@@ -13,10 +13,10 @@
     "rollup:validate": "rollup --validate"
   },
   "dependencies": {
-    "axios": "^0.26.1",
     "@ckeditor/ckeditor5-vue": "^4.0.0",
     "@fortawesome/fontawesome-free": "^6.0.0",
     "autoprefixer": "^10.4.4",
+    "axios": "^0.26.1",
     "datatables.net": "^1.11.3",
     "datatables.net-bs5": "^1.11.3",
     "datatables.net-buttons": "^1.5.3",
@@ -37,6 +37,7 @@
     "serialize-javascript": "^3.1.0",
     "shelljs": "^0.8.5",
     "sweetalert2": "^6.6.5",
+    "uuid": "^8.3.2",
     "vue": "^3.2.32",
     "vue-router": "^4.0.14"
   },

@@ -78,6 +78,7 @@ import axios from 'axios';
 import { api_endpoints, helpers }from '@/utils/hooks'
 import CollapsibleFilters from '@/components/forms/collapsible_component.vue'
 //import '@/components/common/filters.css'
+import { v4 as uuid } from 'uuid';
 
 export default {
     name: 'TableCompliances',
@@ -99,7 +100,7 @@ export default {
     data() {
         let vm = this;
         return {
-            datatable_id: 'compliances-datatable-' + vm._uid,
+            datatable_id: 'compliances-datatable-' + uuid(),
 
             // selected values for filtering
             filterComplianceType: sessionStorage.getItem('filterComplianceType') ? sessionStorage.getItem('filterComplianceType') : 'all',

@@ -75,6 +75,7 @@ import ApprovalHistory from '../internal/approvals/approval_history.vue'
 import { api_endpoints, helpers }from '@/utils/hooks'
 import CollapsibleFilters from '@/components/forms/collapsible_component.vue'
 import axios from 'axios';
+import { v4 as uuid } from 'uuid';
 
 export default {
     name: 'TableApprovals',
@@ -102,7 +103,7 @@ export default {
     data() {
         let vm = this;
         return {
-            datatable_id: 'approvals-datatable-' + vm._uid,
+            datatable_id: 'approvals-datatable-' + uuid(),
             //approvalTypesToDisplay: ['wla'],
             show_expired_surrendered: false,
             selectedWaitingListAllocationId: null,

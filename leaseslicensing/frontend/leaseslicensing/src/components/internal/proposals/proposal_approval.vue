@@ -58,7 +58,7 @@ import datatable from '@vue-utils/datatable.vue'
 import RequirementDetail from './proposal_add_requirement.vue'
 //import ComponentSiteSelection from '@/components/common/apiary/component_site_selection.vue'
 import FormSection from "@/components/forms/section_toggle.vue"
-import uuid from 'uuid'
+import { v4 as uuid } from 'uuid';
 import { constants } from '@/utils/hooks'
 
 export default {

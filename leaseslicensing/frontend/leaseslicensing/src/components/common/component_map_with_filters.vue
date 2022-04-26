@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import uuid from 'uuid'
+import { v4 as uuid } from 'uuid';
 import { api_endpoints, helpers, constants } from '@/utils/hooks'
 import CollapsibleFilters from '@/components/forms/collapsible_component.vue'
 

@@ -1,5 +1,5 @@
 <template>
-   <div id="DataTable">
+   <div>
       <table class="hover table border table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%" :id="id">
             <thead>
                 <tr>
@@ -13,18 +13,16 @@
 
 </template>
 <script>
-    
-    //import {$, DataTableBs} from '../../hooks'
-    //import ResponsiveDatatablesHelper from "../responsive_datatable_helper.js"
-//module.exports = {
-//import $ from 'jquery';
-import 'datatables.net';
+// now in index.html
+//import 'datatables.net';
 import 'datatables.net-bs5';
 import 'datatables.net-responsive-bs';
 import 'datatables.net-buttons';
-import $ from 'jquery';
+// still required?
+//import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+
 export default {
-   name : 'DataTable',
+   name : 'DataTableComponent',
    props:{
       dtHeaders:{
          type:Array,
@@ -40,7 +38,7 @@ export default {
    },
    data : function () {
       return {
-         table:null,
+         //table:null,
          vmDataTable: null,
       }
    },
@@ -51,12 +49,12 @@ export default {
        initEvents: function () {
            let vm =this;
            //var responsiveHelper;
+           /*
            var breakpointDefinition = {
                //bootstrap grid values
                tablet: 992,
                phone : 768
            };
-           /*
            var responsiveOptions = {
                autoWidth        : false,
                preDrawCallback: function () {
@@ -76,20 +74,26 @@ export default {
            //var options = Object.assign(vm.dtOptions,responsiveOptions)
            // forget about ResponsiveDatatablesHelper
            var options = Object.assign(vm.dtOptions)
-           vm.vmDataTable = $(vm.table).DataTable(options);
+           //vm.vmDataTable = $(vm.table).DataTable(options);
+           //console.log($('#'+vm.id))
+           //vm.vmDataTable = $('#'+vm.id).DataTable(options);
+           vm.vmDataTable = new DataTable('#'+vm.id, options);
            $(vm.table).resize(function (e) {
                vm.vmDataTable.draw(true);
            });
        }
    },
    mounted:function () {
-      console.log($);
+       console.log("datatables")
       let vm = this;
       vm.table =$('#'+vm.id);
-      console.log($.fn);
-      $.fn.dataTable.ext.errMode = 'throw';
+      //$.fn.DataTable.ext.errMode = 'throw';
+       /*
+      console.log(vm.id);
+      console.log(vm.table)
       // $.fn.dataTable.ext.classes.sPageButton = 'page-link page-item';
-      vm.initEvents();
+       */
+      this.initEvents();
    }
 };
 </script>

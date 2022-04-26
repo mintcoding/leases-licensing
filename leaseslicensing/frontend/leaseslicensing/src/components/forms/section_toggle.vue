@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { v4 as uuid } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
     name:"FormSection",
@@ -54,7 +54,7 @@ export default {
     },
     data:function () {
         return {
-            custom_id: uuid(),
+            custom_id: uuidv4(),
             /*
             title:"Section title",
             panel_chevron_class: null,

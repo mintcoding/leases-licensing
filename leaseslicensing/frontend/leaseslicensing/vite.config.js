@@ -29,7 +29,6 @@ export default defineConfig({
       '@common-utils':  path.resolve(__dirname, 'src/components/common/'),
     }
   },
-    /*
   build: {
       rollupOptions: {
           plugins: [commonjs(), resolve(), ],
@@ -40,5 +39,4 @@ export default defineConfig({
           },
       },
   },
-  */
 })

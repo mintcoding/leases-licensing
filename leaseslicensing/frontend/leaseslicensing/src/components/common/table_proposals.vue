@@ -76,6 +76,7 @@ import datatable from '@/utils/vue/datatable.vue'
 import { api_endpoints, helpers } from '@/utils/hooks'
 import CollapsibleFilters from '@/components/forms/collapsible_component.vue'
 import axios from 'axios'
+import { v4 as uuid } from 'uuid';
 //const axios = require('axios').default;
 
 export default {
@@ -118,8 +119,9 @@ export default {
     data() {
         let vm = this;
         return {
-            datatable_id: 'applications-datatable-' + vm._uid,
+            id: null,
 
+            datatable_id: 'applications-datatable-' + uuid(),
             // selected values for filtering
             filterApplicationType: sessionStorage.getItem(vm.filterApplicationType_cache_name) ? sessionStorage.getItem(vm.filterApplicationType_cache_name) : 'all',
             filterApplicationStatus: sessionStorage.getItem(vm.filterApplicationStatus_cache_name) ? sessionStorage.getItem(vm.filterApplicationStatus_cache_name) : 'all',
@@ -131,7 +133,7 @@ export default {
             application_statuses: [],
 
             dateFormat: 'DD/MM/YYYY',
-            datepickerOptions:{
+           datepickerOptions:{
                 format: 'DD/MM/YYYY',
                 showClear:true,
                 useCurrent:false,
@@ -633,9 +635,9 @@ export default {
         this.fetchFilterLists()
     },
     mounted: function(){
-        let vm = this;
+        this.id = uuid();
         this.$nextTick(() => {
-            vm.addEventListeners();
+            this.addEventListeners();
         });
     }
 }
