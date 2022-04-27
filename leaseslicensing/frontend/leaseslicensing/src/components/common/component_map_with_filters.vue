@@ -623,7 +623,7 @@ export default {
                 for (var i = 0; i < layers.length; i++){
                     console.log(layers[i])
                     let l = new TileWMS({
-                        url: process.env['kmi_server_url'] + '/geoserver/' + layers[i].layer_group_name + '/wms',
+                        url: env['kmi_server_url'] + '/geoserver/' + layers[i].layer_group_name + '/wms',
                         params: {
                             'FORMAT': 'image/png',
                             'VERSION': '1.1.1',
@@ -652,7 +652,7 @@ export default {
             let vm = this;
 
             let satelliteTileWms = new TileWMS({
-                url: process.env['kmi_server_url'] + '/geoserver/public/wms',
+                url: env['kmi_server_url'] + '/geoserver/public/wms',
                 params: {
                     'FORMAT': 'image/png',
                     'VERSION': '1.1.1',

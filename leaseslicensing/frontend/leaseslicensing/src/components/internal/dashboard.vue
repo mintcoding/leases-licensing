@@ -171,7 +171,7 @@ export default {
     mounted: function () {
         let vm = this
 
-        vm.$http.get('/api/profile').then(res => {
+        fetch('/api/profile').then(res => {
             vm.accessing_user = res.body
         })
         this.$nextTick(function(){
