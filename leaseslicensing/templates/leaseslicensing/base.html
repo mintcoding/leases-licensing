@@ -26,7 +26,6 @@
         {% endblock %}
         {% block custom_js %}
             <script type="module" src="{% static vite_vendor %}?v={{build_tag}}"></script>
-            <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
             <script language="javascript">
                     var env = {
                         "kmi_server_url": "{{ KMI_SERVER_URL }}"
