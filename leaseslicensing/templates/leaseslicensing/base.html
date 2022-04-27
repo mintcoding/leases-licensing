@@ -25,6 +25,7 @@
         <link rel="stylesheet" href="{% static vite_css %}?v={{build_tag}}">
         {% endblock %}
         {% block custom_js %}
+            <script type="module" src="{% static vite_vendor %}?v={{build_tag}}"></script>
             <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
             <script language="javascript">
                     var env = {
@@ -35,7 +36,7 @@
             {% if app_build_url %}
                 <script type="module" src="{{ app_build_url }}"></script>
             {% else %}
-    <script type="text/javascript" src="{% static vite_file %}?v={{build_tag}}"></script>
+    <script type="module" src="{% static vite_file %}?v={{build_tag}}"></script>
             {% endif %}
 
         {% endblock %}

@@ -7,9 +7,11 @@ import App from './App.vue'
 import helpers from '@/utils/helpers'
 import api_endpoints from './api'
 import CKEditor from '@ckeditor/ckeditor5-vue';
+/*
 import '@/../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
 import '@/../node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css';
 import "@/../node_modules/select2/dist/css/select2.min.css";
+*/
 /*
 // Add CSRF Token to every request
 axios.interceptors.request.use( function ( config ) {

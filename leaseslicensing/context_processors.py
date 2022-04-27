@@ -23,7 +23,8 @@ print(vite_manifest)
 #vite_css = str(os.path.join(vite_static_root, vite_manifest.get("src/main.js").get("css")[0].replace('assets/','')))
 #vite_file = str(os.path.join(vite_static_root, vite_manifest.get("src/main.js").get("file").replace('assets/','')))
 
-#vite_vendor = str(os.path.join(vite_static_root, vite_manifest.get("index.html").get("imports")[0][1:]))
+vite_vendor_key = vite_manifest.get("index.html").get("imports")[0]
+vite_vendor = str(os.path.join(vite_static_root, vite_manifest.get(vite_vendor_key).get("file").replace('assets/','')))
 vite_css = str(os.path.join(vite_static_root, vite_manifest.get("index.html").get("css")[0].replace('assets/','')))
 vite_file = str(os.path.join(vite_static_root, vite_manifest.get("index.html").get("file").replace('assets/','')))
 
@@ -64,7 +65,7 @@ def leaseslicensing_url(request):
         'template_group': template_group,
         'template_title': template_title,
         'build_tag': BUILD_TAG,
-        #'vite_vendor': vite_vendor,
+        'vite_vendor': vite_vendor,
         'vite_css': vite_css,
         'vite_file': vite_file,
     }

@@ -128,7 +128,6 @@ import MeasureStyles, { formatLength } from '@/components/common/measure.js'
 //import "select2/dist/css/select2.min.css";
 //require("select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css");
 import RangeSlider from '@/components/forms/range_slider.vue'
-import axios from 'axios';
 
 export default {
     name: 'MapComponentWithFilters',
@@ -619,7 +618,7 @@ export default {
         },
         addOptionalLayers: function(){
             let vm = this
-            axios.get('/api/map_layers/').then(response => {
+            fetch('/api/map_layers/').then(response => {
                 let layers = response.body
                 for (var i = 0; i < layers.length; i++){
                     console.log(layers[i])
@@ -743,13 +742,13 @@ export default {
             let vm = this;
 
             // Application Types
-            axios.get(api_endpoints.application_types_dict + '?for_filter=true').then((response) => {
+            fetch(api_endpoints.application_types_dict + '?for_filter=true').then((response) => {
                 vm.applySelect2ToApplicationTypes(response.body)
             },(error) => {
             })
 
             // Application Statuses
-            axios.get(api_endpoints.application_statuses_dict + '?for_filter=true').then((response) => {
+            fetch(api_endpoints.application_statuses_dict + '?for_filter=true').then((response) => {
                 vm.applySelect2ToApplicationStatuses(response.body)
             },(error) => {
             })

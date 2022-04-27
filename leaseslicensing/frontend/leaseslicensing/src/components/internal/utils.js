@@ -4,7 +4,7 @@ import {helpers} from '@/utils/hooks'
 export default {
     fetchProposal: function(id){
         return new Promise ((resolve,reject) => {
-            this.$http.get(helpers.add_endpoint_json(api.proposals,id)).then((response) => {
+            fetch(helpers.add_endpoint_json(api.proposals,{ body:id })).then((response) => {
                 resolve(response.body);
             },
             (error) => {
@@ -14,7 +14,7 @@ export default {
     },
     fetchOrganisations: function(id){
         return new Promise ((resolve,reject) => {
-            this.$http.get(api.organisations).then((response) => {
+            fetch(api.organisations).then((response) => {
                 resolve(response.body);
             },
             (error) => {
@@ -24,7 +24,7 @@ export default {
     },
     fetchCountries: function (){
         return new Promise ((resolve,reject) => {
-            this.$http.get(api.countries).then((response) => {
+            fetch(api.countries).then((response) => {
                 resolve(response.body);
             },
             (error) => {
@@ -35,7 +35,7 @@ export default {
     },
     fetchOrganisation: function(id){
         return new Promise ((resolve,reject) => {
-            this.$http.get(helpers.add_endpoint_json(api.organisations,id)).then((response) => {
+            fetch(helpers.add_endpoint_json(api.organisations,{ body: id })).then((response) => {
                 resolve(response.body);
             },
             (error) => {
@@ -45,7 +45,7 @@ export default {
     },
     fetchUser: function(id){
         return new Promise ((resolve,reject) => {
-            this.$http.get(helpers.add_endpoint_json(api.users,id)).then((response) => {
+            fetch(helpers.add_endpoint_json(api.users,{ body:id })).then((response) => {
                 resolve(response.body);
             },
             (error) => {
@@ -55,7 +55,7 @@ export default {
     },
     fetchOrgRequestPending:function (id){
         return new Promise ((resolve,reject) => {
-            this.$http.get(helpers.add_endpoint_json(api.users,id + '/pending_org_requests')).then((response) => {
+            fetch(helpers.add_endpoint_json(api.users,{body:id + '/pending_org_requests'})).then((response) => {
                 resolve(response.body);
             },
             (error) => {
@@ -65,7 +65,7 @@ export default {
     },
     fetchProfile: function (){
         return new Promise ((resolve,reject) => {
-            this.$http.get(api.profile).then((response) => {
+            fetch(api.profile).then((response) => {
                 resolve(response.body);
             },
             (error) => {

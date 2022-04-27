@@ -14,7 +14,7 @@
 </template>
 <script>
 // now in index.html
-//import 'datatables.net';
+import 'datatables.net';
 import 'datatables.net-bs5';
 import 'datatables.net-responsive-bs';
 import 'datatables.net-buttons';

@@ -74,7 +74,6 @@
 
 <script>
 import datatable from '@/utils/vue/datatable.vue'
-import axios from 'axios';
 import { api_endpoints, helpers }from '@/utils/hooks'
 import CollapsibleFilters from '@/components/forms/collapsible_component.vue'
 //import '@/components/common/filters.css'
@@ -429,7 +428,7 @@ export default {
             let vm = this;
 
             // Statuses
-            axios.get(api_endpoints.compliance_statuses_dict).then((response) => {
+            fetch(api_endpoints.compliance_statuses_dict).then((response) => {
                 vm.compliance_statuses = response.body
             },(error) => {
                 console.log(error);
