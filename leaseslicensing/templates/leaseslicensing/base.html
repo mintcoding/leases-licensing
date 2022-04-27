@@ -19,12 +19,12 @@
 <html lang="en">
     <body>
         {% block header_top_menu %}
-        css  {{ vite_css }}
         {% endblock %}
         {% block extra_css %}
         <link rel="stylesheet" href="{% static vite_css %}?v={{build_tag}}">
         {% endblock %}
         {% block custom_js %}
+            <script type="module" src="{% static vite_datatables_js %}?v={{build_tag}}"></script>
             <script type="module" src="{% static vite_vendor %}?v={{build_tag}}"></script>
             <script language="javascript">
                     var env = {

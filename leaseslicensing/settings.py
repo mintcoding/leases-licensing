@@ -137,6 +137,12 @@ CACHES = {
 STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles_ll')
 STATICFILES_DIRS.append(os.path.join(os.path.join(BASE_DIR, 'leaseslicensing', 'static')))
 STATICFILES_DIRS.append(("leaseslicensing_vue", os.path.join(os.path.join(BASE_DIR, 'leaseslicensing', 'frontend', 'leaseslicensing', 'dist'))))
+STATICFILES_DIRS.append(
+        (
+            "vite_datatables_js", 
+            os.path.join(os.path.join(BASE_DIR, 'leaseslicensing', 'frontend', 'leaseslicensing', 'node_modules', 'datatables.net', 'js'))
+        )
+    )
 DEV_STATIC = env('DEV_STATIC',False)
 DEV_STATIC_URL = env('DEV_STATIC_URL')
 if DEV_STATIC and not DEV_STATIC_URL:

@@ -15,7 +15,7 @@
 <script>
 // now in index.html
 //import 'datatables.net';
-import '@/../node_modules/datatables.net/js/jquery.dataTables.min.js'
+//import '@/../node_modules/datatables.net/js/jquery.dataTables.min.js'
 import 'datatables.net-bs5';
 import 'datatables.net-responsive-bs';
 import 'datatables.net-buttons';

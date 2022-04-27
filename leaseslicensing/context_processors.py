@@ -28,6 +28,8 @@ vite_vendor = str(os.path.join(vite_static_root, vite_manifest.get(vite_vendor_k
 vite_css = str(os.path.join(vite_static_root, vite_manifest.get("index.html").get("css")[0].replace('assets/','')))
 vite_file = str(os.path.join(vite_static_root, vite_manifest.get("index.html").get("file").replace('assets/','')))
 
+vite_datatables_js = str(os.path.join('vite_datatables_js', 'jquery.dataTables.min.js'))
+
 #vite_vendor_tag = '{% static "' + vite_vendor + '" %}'
 #vite_css_tag = '{% static "' + vite_css + '" %}'
 #vite_file_tag = '{% static "' + vite_file + '" %}'
@@ -68,4 +70,5 @@ def leaseslicensing_url(request):
         'vite_vendor': vite_vendor,
         'vite_css': vite_css,
         'vite_file': vite_file,
+        'vite_datatables_js': vite_datatables_js,
     }
