@@ -13,6 +13,7 @@ export default defineConfig({
   plugins: [
       //viteCommonjs(),
       vue(),
+      /*
       AutoImport({
           imports: [
               {
@@ -23,6 +24,7 @@ export default defineConfig({
           ]
       }),
       //splitVendorChunkPlugin(),
+      */
   ],
     /*
   optimizeDeps: {
