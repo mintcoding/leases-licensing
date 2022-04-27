@@ -36,7 +36,7 @@ export default defineConfig({
       manifest: true,
       //polyfillModulePreload: false,
       target: "es2021",
-      outDir: '../../static/leaseslicensing_vue',
+      //outDir: '../../static/leaseslicensing_vue',
       rollupOptions: {
           plugins: [commonjs(), resolve(), ],
           //input: 'src/main.js',
