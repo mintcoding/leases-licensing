@@ -29,6 +29,7 @@ vite_css = str(os.path.join(vite_static_root, vite_manifest.get("index.html").ge
 vite_file = str(os.path.join(vite_static_root, vite_manifest.get("index.html").get("file").replace('assets/','')))
 
 vite_datatables_js = str(os.path.join('vite_datatables_js', 'jquery.dataTables.min.js'))
+vite_select2_js = str(os.path.join('vite_select2_js', 'select2.full.min.js'))
 
 #vite_vendor_tag = '{% static "' + vite_vendor + '" %}'
 #vite_css_tag = '{% static "' + vite_css + '" %}'
@@ -71,4 +72,5 @@ def leaseslicensing_url(request):
         'vite_css': vite_css,
         'vite_file': vite_file,
         'vite_datatables_js': vite_datatables_js,
+        'vite_select2_js': vite_select2_js,
     }

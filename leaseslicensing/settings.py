@@ -143,6 +143,12 @@ STATICFILES_DIRS.append(
             os.path.join(os.path.join(BASE_DIR, 'leaseslicensing', 'frontend', 'leaseslicensing', 'node_modules', 'datatables.net', 'js'))
         )
     )
+STATICFILES_DIRS.append(
+        (
+            "vite_select2_js", 
+            os.path.join(os.path.join(BASE_DIR, 'leaseslicensing', 'frontend', 'leaseslicensing', 'node_modules', 'select2', 'dist', 'js'))
+        )
+    )
 DEV_STATIC = env('DEV_STATIC',False)
 DEV_STATIC_URL = env('DEV_STATIC_URL')
 if DEV_STATIC and not DEV_STATIC_URL:
