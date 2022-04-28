@@ -419,6 +419,7 @@ export default {
     methods: {
         adjust_table_width: function(){
             this.$refs.application_datatable.vmDataTable.columns.adjust()
+            console.log(this.$refs.application_datatable.vmDataTable)
             this.$refs.application_datatable.vmDataTable.responsive.recalc()
         },
         collapsible_component_mounted: function(){

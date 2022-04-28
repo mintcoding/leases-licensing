@@ -92,6 +92,8 @@
 </template>
 
 <script>
+import * as select2 from '@/../node_modules/select2/dist/js/select2.min.js';
+//const select2 = import('@/../node_modules/select2/dist/js/select2.min.js');
 import { v4 as uuid } from 'uuid';
 import { api_endpoints, helpers, constants } from '@/utils/hooks'
 import CollapsibleFilters from '@/components/forms/collapsible_component.vue'
@@ -120,13 +122,9 @@ import Overlay from 'ol/Overlay';
 import { getArea, getLength } from 'ol/sphere'
 import Datatable from '@vue-utils/datatable.vue'
 import Cluster from 'ol/source/Cluster';
-/*
-import 'select2/dist/css/select2.min.css'
-import 'select2-bootstrap-theme/dist/select2-bootstrap.min.css'
-*/
 import MeasureStyles, { formatLength } from '@/components/common/measure.js'
-//import "select2/dist/css/select2.min.css";
-//require("select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css");
+import "@/../node_modules/select2/dist/css/select2.min.css";
+import "@/../node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css";
 import RangeSlider from '@/components/forms/range_slider.vue'
 
 export default {
@@ -742,14 +740,16 @@ export default {
             let vm = this;
 
             // Application Types
-            fetch(api_endpoints.application_types_dict + '?for_filter=true').then((response) => {
-                vm.applySelect2ToApplicationTypes(response.body)
+            fetch(api_endpoints.application_types_dict + '?for_filter=true').then(async (response) => {
+                const types = await response.json()
+                vm.applySelect2ToApplicationTypes(types)
             },(error) => {
             })
 
             // Application Statuses
-            fetch(api_endpoints.application_statuses_dict + '?for_filter=true').then((response) => {
-                vm.applySelect2ToApplicationStatuses(response.body)
+            fetch(api_endpoints.application_statuses_dict + '?for_filter=true').then(async (response) => {
+                const statuses = await response.json()
+                vm.applySelect2ToApplicationStatuses(statuses)
             },(error) => {
             })
         },

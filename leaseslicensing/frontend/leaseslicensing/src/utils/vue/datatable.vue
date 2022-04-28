@@ -16,13 +16,12 @@
 // now in index.html
 //import 'datatables.net';
 //import '@/../node_modules/datatables.net/js/jquery.dataTables.min.js'
-/*
-import 'datatables.net-bs5';
+//import from 'datatables.net-bs5';
 import 'datatables.net-responsive-bs';
 import 'datatables.net-buttons';
-*/
 // still required?
 //import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+//port * from '@/../node_modules/datatables.net-responsive-bs/';
 
 export default {
    name : 'DataTableComponent',
