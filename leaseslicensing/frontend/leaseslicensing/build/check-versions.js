@@ -1,4 +1,5 @@
-var chalk = require('chalk')
+//var chalk = require('chalk')
+import 'chalk'
 var semver = require('semver')
 var packageConfig = require('../package.json')
 var shell = require('shelljs')
