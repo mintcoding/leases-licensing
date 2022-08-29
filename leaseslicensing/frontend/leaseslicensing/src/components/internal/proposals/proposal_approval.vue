@@ -1,6 +1,6 @@
-<template id="proposal_approval">
+<template ref="proposal_approval" id="proposal_approval">
     <div>
-        <div v-if="displayApprovedMsg" class="col-md-12 alert alert-success">
+        <div ref="another_ref" id="another_ref" v-if="displayApprovedMsg" class="col-md-12 alert alert-success">
             <!--p>The {{ applicationTypeNameDisplay }} was approved to proceed to a full application on date by {{ proposal.assigned_approver.email }}</p-->
             <p>The {{ applicationTypeNameDisplay }} was approved to proceed to a {{ fullApplicationText }} on {{ approvalIssueDate }} by { insert approver name here }</p>
             <!--p>Expiry date: {{ approvalExpiryDate }}</p>
@@ -9,8 +9,23 @@
         <div v-if="displayDeclinedMsg" class="col-md-12 alert alert-warning">
             <p>The proposal was declined. The decision was emailed to {{ proposal.submitter.email }}</p>
         </div>
+        <ProposedApproval
+            v-if="proposal"
+            :proposal="proposal"
+            ref="proposed_approval"
+            :processing_status="proposal.processing_status"
+            :proposal_id="proposal.id"
+            :proposal_type='proposal.proposal_type.code'
+            :submitter_email="submitter_email"
+            :applicant_email="applicant_email"
+            @refreshFromResponse="refreshFromResponse"
+            :key="proposedApprovalKey"
+            :proposedApprovalKey="proposedApprovalKey"
+            :proposalApproval=true
+            :readonly=true
+        />
 
-        <div class="card card-default">
+        <!--div class="card card-default">
             <div class="card-header">
                 <h3 v-if="!isFinalised" class="card-title">Proposed Decision
                     <a class="panelClicker" :href="'#'+proposedDecision" data-toggle="collapse"  data-parent="#userInfo" expanded="false" :aria-controls="proposedDecision">
@@ -45,7 +60,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div-->
     </div>
 </template>
 <script>
@@ -55,6 +70,7 @@ import {
 }
 from '@/utils/hooks'
 import { constants } from '@/utils/hooks'
+import ProposedApproval from '@/components/internal/proposals/proposed_issuance.vue'
 
 export default {
     name: 'InternalProposalApproval',
@@ -73,8 +89,19 @@ export default {
     watch:{
     },
     components:{
+        ProposedApproval,
     },
     computed:{
+        applicant_email:function(){
+            return this.proposal && this.proposal.applicant.email ? this.proposal.applicant.email : '';
+        },
+        submitter_email: function(){
+            if (this.proposal.submitter){
+                return this.proposal.submitter.email
+            } else {
+                return this.proposal.applicant_obj.email
+            }
+        },
         approvalIssueDate: function() {
             if (this.proposal) {
                 return this.proposal.approval_issue_date;
@@ -203,7 +230,6 @@ export default {
         },
     },
     mounted: function(){
-        let vm = this;
     }
 }
 </script>

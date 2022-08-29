@@ -49,6 +49,10 @@
                     <ApprovalScreen
                         :proposal="proposal"
                         @refreshFromResponse="refreshFromResponse"
+                        :submitter_email="submitter_email"
+                        :applicant_email="applicant_email"
+                        :key="proposedApprovalKey"
+                        :proposedApprovalKey="proposedApprovalKey"
                     />
                 </template>
 
@@ -215,7 +219,6 @@
             :processing_status="proposal.processing_status"
             :proposal_id="proposal.id"
             :proposal_type='proposal.proposal_type.code'
-            :isApprovalLevelDocument="isApprovalLevelDocument"
             :submitter_email="submitter_email"
             :applicant_email="applicant_email"
             @refreshFromResponse="refreshFromResponse"

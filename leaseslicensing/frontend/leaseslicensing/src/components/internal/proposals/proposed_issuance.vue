@@ -1,10 +1,10 @@
 <template lang="html">
     <div id="proposedIssuanceApproval">
-        <modal transition="modal fade" @ok="ok()" @cancel="cancel()" :title="title" large>
+        <modal ref="proposedIssuanceModal" id="proposedIssuanceModal" transition="modal fade" @ok="ok()" @cancel="cancel()" :title="title" large>
             <!--template v-if="is_local">
                 proposed_issuance.vue
             </template-->
-            <div class="container-fluid">
+            <div ref="proposedIssuanceContainer" id="proposedIssuanceContainer" class="container-fluid">
                 <div class="row">
                     <form class="form-horizontal" name="approvalForm">
                         <VueAlert :show.sync="showError" type="danger"><strong v-html="errorString"></strong></VueAlert>
@@ -23,6 +23,7 @@
                                         id="approve_lease_licence" 
                                         value="approve_lease_licence" 
                                         v-model="selectedDecision"
+                                        :readonly="readonly"
                                         />
                                         <label class="form-check-label" for="approve_lease_licence" style="font-weight:normal">Invite applicant to apply for a lease or licence</label>
                                     </div>
@@ -34,6 +35,7 @@
                                         id="approve_competitive_process" 
                                         value="approve_competitive_process" 
                                         v-model="selectedDecision"
+                                        :readonly="readonly"
                                         />
                                         <label class="form-check-label" for="approve_competitive_process" style="font-weight:normal">Start Competitive process</label>
                                     </div>
@@ -55,6 +57,7 @@
                                         :can_view_richtext_src=true
                                         :key="proposedApprovalKey"
                                         v-model="approval.details"
+                                        :readonly="readonly"
                                         />
 
                                     </div>
@@ -67,7 +70,15 @@
                                         <label v-else class="control-label pull-left"  for="Name">Proposed BCC email</label>
                                     </div>
                                     <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="approval_bcc" style="width:70%;" ref="bcc_email" v-model="approval.bcc_email">
+                                        <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        name="approval_bcc" 
+                                        style="width:70%;" 
+                                        ref="bcc_email" 
+                                        v-model="approval.bcc_email"
+                                        :readonly="readonly"
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -93,6 +104,7 @@
                                             ref="approvalType"
                                             class="form-control"
                                             v-model="selectedApprovalType"
+                                            :readonly="readonly"
                                         >
                                             <option value="null"></option>
                                             <option v-for="atype in approvalTypes" :value="atype" :key="atype.name">{{atype.name}}</option>
@@ -108,6 +120,7 @@
                                             ref="approvalSubType"
                                             class="form-control"
                                             v-model="selectedApprovalSubType"
+                                            :readonly="readonly"
                                         >
                                             <option value="null"></option>
                                             <option v-for="atype in approvalSubTypes" :value="atype" :key="atype.name">{{atype.name}}</option>
@@ -129,6 +142,7 @@
                                             name="start_date" 
                                             placeholder="DD/MM/YYYY" 
                                             v-model="approval.start_date"
+                                            :readonly="readonly"
                                             >
                                             <i class="bi bi-calendar3 ms-2" style="font-size: 2rem"></i>
                                             <!--span class="input-group-addon">
@@ -154,6 +168,7 @@
                                             name="due_date" 
                                             placeholder="DD/MM/YYYY" 
                                             v-model="approval.expiry_date"
+                                            :readonly="readonly"
                                             >
                                             <i class="bi bi-calendar3 ms-2" style="font-size: 2rem"></i>
                                             <!--span class="input-group-addon">
@@ -180,6 +195,7 @@
                                         :key="selectedApprovalTypeName"
                                         :placeholder_text="selectedApprovalTypeDetailsPlaceholder"
                                         v-model="approval.details"
+                                        :readonly="readonly"
                                         />
                                     </div>
                                 </div>
@@ -195,6 +211,7 @@
                                             :isRepeatable="true"
                                             :documentActionUrl="proposedApprovalDocumentsUrl"
                                             :replace_button_by_text="true"
+                                            :readonly="readonly"
                                         />
                                     </div>
                                 </div>
@@ -204,7 +221,15 @@
                                         <label v-else class="control-label pull-left"  for="Name">Proposed CC email</label>
                                     </div>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="approval_cc" style="width:70%;" ref="cc_email" v-model="approval.cc_email">
+                                        <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        name="approval_cc" 
+                                        style="width:70%;" 
+                                        ref="cc_email" 
+                                        v-model="approval.cc_email"
+                                        :readonly="readonly"
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -222,7 +247,7 @@
                                         </div>
                                         <div class="col-sm-9">
                                             <FileField 
-                                                :readonly="withApprover"
+                                                :readonly="withApprover || readonly"
                                                 :name="'lease_licence_approval_documents_' + docType.name + '_' + docType.id"
                                                 :id="'lease_licence_approval_documents_' + docType.name + '_' + docType.id"
                                                 :approval_type="selectedApprovalType.id"
@@ -257,8 +282,9 @@ import VueAlert from '@vue-utils/alert.vue'
 import RichText from '@/components/forms/richtext.vue'
 import {helpers, api_endpoints} from "@/utils/hooks.js"
 import FileField from '@/components/forms/filefield_immediate.vue'
+import { ref } from 'vue'
 export default {
-    name:'Proposed-Approval',
+    name:'ProposedIssuance',
     components:{
         modal,
         VueAlert,
@@ -278,10 +304,22 @@ export default {
             type: String,
             required: true
         },
+        proposalApproval: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        readonly: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        /*
         isApprovalLevelDocument: {
             type: Boolean,
             required: true
         },
+        */
         submitter_email: {
             type: String,
             required: true
@@ -526,6 +564,26 @@ export default {
             });
         },
    },
+    mounted() {
+        this.$nextTick(() => {
+            if (this.proposalApproval) {
+                /*
+                const modalRef = ref('proposedIssuanceModal');
+                const containerRef = ref('proposedIssuanceContainer');
+                console.log(modalRef);
+                console.log(containerRef);
+                const root = ref(null);
+                console.log(root);
+                console.log(this.$refs);
+                */
+                const modalElement = document.getElementById('proposedIssuanceModal');
+                const containerElement = document.getElementById('proposedIssuanceContainer');
+                console.log(modalElement);
+                console.log(containerElement);
+                modalElement.replaceWith(containerElement);
+            }
+        });
+    },
    created: async function () {
         let vm =this;
         vm.form = document.forms.approvalForm;
