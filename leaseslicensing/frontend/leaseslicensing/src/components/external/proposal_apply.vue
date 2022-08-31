@@ -44,9 +44,7 @@
     </div>
 </template>
 <script>
-import Vue from 'vue'
 import FormSection from '@/components/forms/section_toggle.vue'
-//require('bootstrap/dist/css/bootstrap.css')
 import {
   api_endpoints,
   helpers

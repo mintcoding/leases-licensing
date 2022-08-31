@@ -266,7 +266,7 @@ import FormSection from "@/components/forms/section_toggle.vue"
 import CollapsibleQuestions from '@/components/forms/collapsible_component.vue'
 import ChecklistQuestion from '@/components/common/component_checklist_question.vue'
 import TableRelatedItems from '@/components/common/table_related_items.vue'
-require("select2/dist/css/select2.min.css");
+//require("select2/dist/css/select2.min.css");
 
 export default {
     name: 'InternalProposal',

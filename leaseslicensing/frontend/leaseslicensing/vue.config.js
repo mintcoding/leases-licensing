@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     outputDir: path.resolve(__dirname, "../../static/leaseslicensing_vue"),
@@ -14,6 +15,7 @@ module.exports = {
     },
     configureWebpack: {
         plugins:[
+            new MiniCssExtractPlugin(),
             new webpack.ProvidePlugin({
                // use fetch api instead
                //axios: "axios",
@@ -26,6 +28,7 @@ module.exports = {
                moment: "moment",
                swal: "sweetalert2",
                _: 'lodash',
+               select2: 'select2',
                //swal: Swal,
                //_: 'lodash',
                //datetimepicker:"../node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"
@@ -41,6 +44,60 @@ module.exports = {
         },
         module: {
             rules: [
+              {
+                test: /\.css$/i,
+                use: [
+                    //MiniCssExtractPlugin.loader, 
+                    //"style-loader",
+                    {
+                        loader: "css-loader",
+                        options: {
+                            //url: true,
+                            //import: true,
+                            esModule: false,
+                            import: {
+                                filter: (url, media, resourcePath) => {
+                                    console.log("url")
+                                    console.log(url)
+                                    if (url.includes("node_modules")) {
+                                        return true;
+                                    } 
+                                    return false;
+                                },
+                            },
+                        },
+                    }
+                    /*
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    [
+                                        "postcss-preset-env",
+                                        {
+                                            // Options
+                                        },
+                                    ],
+                                ],
+                            },
+                        },
+                    }
+                    */
+                ],
+                  /*
+                options: {
+                    import: {
+                        filter: (url, media, resourcePath) => {
+                            if (url.includes("node_modules")) {
+                                return true;
+                            } 
+                            return false;
+                        },
+                    },
+                },
+                */
+              },
               /* config.module.rule('images') */
               {
                 test: /\.(png|jpe?g|gif|webp|avif)(\?.*)?$/,
@@ -57,7 +114,7 @@ module.exports = {
                   filename: 'fonts/[name][ext]'
                 }
               },
-            ]
+            ],
         },
     }
 };

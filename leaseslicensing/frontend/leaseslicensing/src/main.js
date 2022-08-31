@@ -17,15 +17,26 @@ import "datatables.net-responsive-bs5";
 import 'datatables.net-buttons/js/dataTables.buttons.js';
 import 'datatables.net-buttons/js/buttons.html5.js';
 
-import "sweetalert2/dist/sweetalert2.css";
-
 import 'jquery-validation';
+//import './global.css';
+/*
+@import url('~sweetalert2/dist/sweetalert2.css');
+@import url('~@fortawesome/fontawesome-free/css/all.min.css');
+@import url('~select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css');
+@import url('~datatables.net-bs5/css/dataTables.bootstrap5.min.css');
+
+@import '~sweetalert2/dist/sweetalert2.css';
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+@import '~select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css';
+@import '~datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+*/
+
+import '../node_modules/sweetalert2/dist/sweetalert2.css';
+import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+import '../node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css';
+import '../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 
 extendMoment(moment);
-
-import '@/../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
-import '@/../node_modules/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css';
-import '@/../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 
 // Add CSRF Token to every request
 const customHeaders = new Headers({
