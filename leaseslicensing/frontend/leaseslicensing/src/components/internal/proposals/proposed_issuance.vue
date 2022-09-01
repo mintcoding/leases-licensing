@@ -1,10 +1,12 @@
 <template lang="html">
+    <!--div id="proposedIssuanceApproval"-->
     <div id="proposedIssuanceApproval">
-        <modal transition="modal fade" @ok="ok()" @cancel="cancel()" :title="title" large>
+        <modal ref="proposedIssuanceModal" transition="modal fade" @ok="ok()" @cancel="cancel()" :title="title" large>
+        <!--modal id="apple" transition="modal fade" @ok="ok()" @cancel="cancel()" :title="title" large-->
             <!--template v-if="is_local">
                 proposed_issuance.vue
             </template-->
-            <div class="container-fluid">
+            <div ref="proposedIssuanceContainer" class="container-fluid">
                 <div class="row">
                     <form class="form-horizontal" name="approvalForm">
                         <VueAlert :show.sync="showError" type="danger"><strong v-html="errorString"></strong></VueAlert>
@@ -278,9 +280,14 @@ export default {
             type: String,
             required: true
         },
+        proposalApproval: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
         isApprovalLevelDocument: {
             type: Boolean,
-            required: true
+            required: false
         },
         submitter_email: {
             type: String,
@@ -481,6 +488,24 @@ export default {
                 this.approvalSubTypes.push(approvalSubType)
             }
         },
+        checkProposalApproval: function() {
+            if (this.proposalApproval) {
+                /*
+                const rootElement = document.getElementById("proposedIssuanceApproval");
+                const rootElement2 = document.getElementById('apple');
+                const rootElement3 = document.getElementById('pear');
+                const containerElement = document.getElementById('proposedIssuanceContainer');
+                const modalElement = document.getElementById('proposedIssuanceModal');
+                */
+                const containerRef = this.$refs.proposedIssuanceContainer;
+                const modalRef = this.$refs.proposedIssuanceModal;
+                console.log(modalRef)
+                console.log(containerRef)
+                //containerElement.parentElement.replaceWith(containerElement);
+                modalRef.replaceWith(containerRef);
+                console.log("checkProposalApproval")
+            }
+        },
         sendData: async function(){
             this.errors = false;
             this.issuingApproval = true;
@@ -526,6 +551,9 @@ export default {
             });
         },
    },
+    mounted: function() {
+        this.checkProposalApproval();
+    },
    created: async function () {
         let vm =this;
         vm.form = document.forms.approvalForm;

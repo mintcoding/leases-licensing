@@ -48,6 +48,8 @@
                 <template v-if="display_approval_screen">
                     <ApprovalScreen
                         :proposal="proposal"
+                        :submitter_email="submitter_email"
+                        :applicant_email="applicant_email"
                         @refreshFromResponse="refreshFromResponse"
                     />
                 </template>
@@ -721,9 +723,7 @@ export default {
         },
         display_approval_screen: function(){
             let ret_val =
-                this.proposal.processing_status == constants.WITH_APPROVER ||
-                this.proposal.processing_status == constants.AWAITING_STICKER ||
-                this.proposal.processing_status == constants.AWAITING_PAYMENT ||
+                //this.proposal.processing_status == constants.WITH_APPROVER ||
                 this.isFinalised
             return ret_val
         },
