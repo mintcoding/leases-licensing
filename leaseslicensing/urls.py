@@ -2,7 +2,7 @@ from django.conf import settings
 
 # from django.contrib import admin
 from leaseslicensing.admin import admin
-from django.conf.urls import url, include
+from django.urls import include, re_path
 from django.urls import path
 from django.contrib.auth.views import LogoutView, LoginView
 

@@ -13,7 +13,8 @@ from leaseslicensing.components.main.models import (
     Question,
     GlobalSettings,
 )
-from django.conf.urls import url
+#from django.conf.urls import url
+from django.urls import re_path
 from django.template.response import TemplateResponse
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -100,11 +101,11 @@ class HelpPageAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(HelpPageAdmin, self).get_urls()
         my_urls = [
-            url(
+            re_path(
                 "create_leaseslicensing_help/",
                 self.admin_site.admin_view(self.create_leaseslicensing_help),
             ),
-            url(
+            re_path(
                 "create_leaseslicensing_help_assessor/",
                 self.admin_site.admin_view(self.create_leaseslicensing_help_assessor),
             ),
