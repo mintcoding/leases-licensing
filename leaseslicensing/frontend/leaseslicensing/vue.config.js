@@ -47,8 +47,19 @@ module.exports = {
               {
                 test: /\.css$/i,
                 use: [
-                    //MiniCssExtractPlugin.loader, 
+                    'vue-style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: { importLoaders: 1 }
+                            // enable CSS modules
+                            //modules: true,
+                            // customise generated class names
+                            //localIdentName: '[local]_[hash:base64:8]'\
+                    },
+                    'postcss-loader'
+                    //MiniCssExtractPlugin.loader, "css-loader"
                     //"style-loader",
+                    /*
                     {
                         loader: "css-loader",
                         options: {
@@ -67,7 +78,6 @@ module.exports = {
                             },
                         },
                     }
-                    /*
                     {
                         loader: "postcss-loader",
                         options: {
