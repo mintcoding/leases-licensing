@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div v-if="proposal" class="container" id="internalProposal">
         <div v-if="debug">internal/proposals/proposal.vue</div>
         <div class="row">

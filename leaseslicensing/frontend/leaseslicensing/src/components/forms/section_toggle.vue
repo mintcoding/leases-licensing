@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div class="card section-wrapper" :id="custom_id">
         <div class="card-header fw-bold h4" style='padding:30px;'>
             <div 

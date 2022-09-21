@@ -42,10 +42,10 @@
 <script>
 import datatable from '@/utils/vue/datatable.vue'
 import FormSection from "@/components/forms/section_toggle.vue"
-import ApplicationsTable from "@/components/common/table_proposals"
+import ApplicationsTable from "@/components/common/table_proposals.vue"
 //import WaitingListTable from "@/components/common/table_approvals"
-import LicencesAndPermitsTable from "@/components/common/table_approvals"
-import CompliancesTable from "@/components/common/table_compliances"
+import LicencesAndPermitsTable from "@/components/common/table_approvals.vue"
+import CompliancesTable from "@/components/common/table_compliances.vue"
 //import AuthorisedUserApplicationsTable from "@/components/common/table_approval_to_be_endorsed"
 import { api_endpoints, helpers } from '@/utils/hooks'
 

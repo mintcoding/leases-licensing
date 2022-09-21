@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div class="container" >
         <!--button type="button" @click="createML">Mooring Licence Application</button-->
         <div class="row" v-if="applicationsLoading">

@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
    <div id="DataTable">
       <table class="hover table border table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%" :id="id">
             <thead>

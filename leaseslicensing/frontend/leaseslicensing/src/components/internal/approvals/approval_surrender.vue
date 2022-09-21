@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div id="approvalSurrender">
         <modal transition="modal fade" @ok="ok()" @cancel="cancel()" :title="title" large>
             <div class="container-fluid">

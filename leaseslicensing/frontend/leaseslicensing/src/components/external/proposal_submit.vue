@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div class="container" >
         <div class="row d-flex justify-content-center">
             <div v-if="isProposal" class="col-sm-6 borderDecoration">

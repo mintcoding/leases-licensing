@@ -88,10 +88,10 @@
 <script>
 import datatable from '@/utils/vue/datatable.vue'
 import FormSection from "@/components/forms/section_toggle.vue"
-import ApplicationsTable from "@/components/common/table_proposals"
-import ApplicationsReferredToMeTable from "@/components/common/table_proposals"
-import CompetitiveProcessesTable from "@/components/common/table_competitive_processes"
-import MapComponent from "@/components/common/component_map_with_filters"
+import ApplicationsTable from "@/components/common/table_proposals.vue"
+import ApplicationsReferredToMeTable from "@/components/common/table_proposals.vue"
+import CompetitiveProcessesTable from "@/components/common/table_competitive_processes.vue"
+import MapComponent from "@/components/common/component_map_with_filters.vue"
 import { api_endpoints, helpers } from '@/utils/hooks'
 
 export default {

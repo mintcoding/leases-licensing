@@ -62,7 +62,6 @@
 </div>
 </template>
 <script>
-import $ from 'jquery'
 import datatable from '@vue-utils/datatable.vue'
 import {
   api_endpoints,

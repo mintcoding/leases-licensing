@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div class="container" v-if="competitive_process">
         <div class="row">
             <h3>Competitive Process: {{ competitive_process.lodgement_number }}</h3>
@@ -165,12 +165,11 @@ import { v4 as uuid } from 'uuid'
 import CommsLogs from '@common-utils/comms_logs.vue'
 import Workflow from '@common-utils/workflow_competitive_process.vue'
 import FormSection from '@/components/forms/section_toggle.vue'
-import TableParties from '@common-utils/table_parties'
+import TableParties from '@common-utils/table_parties.vue'
 import ComponentMap from '@/components/common/component_map.vue'
 import RichText from '@/components/forms/richtext.vue'
 import FileField from '@/components/forms/filefield_immediate.vue'
 import TableRelatedItems from '@/components/common/table_related_items.vue'
-import { doExpression } from '@babel/types'
 
 export default {
     name: 'CompetitiveProcess',

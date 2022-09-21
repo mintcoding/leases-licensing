@@ -1,5 +1,6 @@
 from confy import env
 from django.conf import settings
+import os
 
 # from ledger.payments.helpers import is_payment_admin
 
@@ -10,6 +11,7 @@ from leaseslicensing.settings import (
     BUILD_TAG,
 )
 
+vite_index = os.path.join(settings.BASE_DIR, 'staticfiles_ll/leaseslicensing_vue/index.html')
 
 def leaseslicensing_url(request):
     # if settings.DOMAIN_DETECTED == 'apiary':
@@ -40,4 +42,5 @@ def leaseslicensing_url(request):
         "template_group": template_group,
         "template_title": template_title,
         "build_tag": BUILD_TAG,
+        "vite_index": vite_index,
     }

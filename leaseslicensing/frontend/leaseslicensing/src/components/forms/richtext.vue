@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div>
         <div class="form-group">
             <!--label :id="id" for="label" class="inline" >{{ label }}</label-->

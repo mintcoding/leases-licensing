@@ -3,7 +3,7 @@
 //import Vue from 'vue'
 import { createApp } from 'vue';
 import router from './router';
-import App from './App';
+import App from './App.vue';
 import helpers from '@/utils/helpers';
 import api_endpoints from './api';
 import CKEditor from '@ckeditor/ckeditor5-vue';

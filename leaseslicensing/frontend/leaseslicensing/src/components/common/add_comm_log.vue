@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div id="AddComms">
         <modal transition="modal fade" @ok="ok()" @cancel="cancel()" title="Communication log - Add entry" large>
             <div class="container-fluid">

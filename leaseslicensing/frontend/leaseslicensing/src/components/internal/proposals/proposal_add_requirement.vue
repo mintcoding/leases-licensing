@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div id="proposalRequirementDetail">
         <modal transition="modal fade" @ok="ok()" @cancel="cancel()" title="Proposed Condition" large>
             <div class="container-fluid">

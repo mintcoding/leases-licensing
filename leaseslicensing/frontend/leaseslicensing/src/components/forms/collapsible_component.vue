@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div>
         <div class="toggle_filters_wrapper">
             <div data-bs-toggle="collapse" :data-bs-target="'#' + target_elem_id" :id="button_elem_id" class="toggle_filters_button collapsed d-flex align-items-center" @click="toggle_filters_button_clicked">

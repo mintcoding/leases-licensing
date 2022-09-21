@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <datatable
         ref="related_items_datatable"
         :id="datatable_id"
