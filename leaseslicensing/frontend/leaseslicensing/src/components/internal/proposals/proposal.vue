@@ -2,9 +2,7 @@
     <div v-if="proposal" class="container" id="internalProposal">
         <div v-if="debug">internal/proposals/proposal.vue</div>
         <div class="row">
-            <h3 v-if="proposal.migrated">Application: {{ proposal.lodgement_number }} (Migrated)</h3>
-            <h3 v-else>Application: {{ proposal.lodgement_number }}</h3>
-            <h4>Application Type: {{ proposal.proposal_type.description }}</h4>
+            <h3>{{ proposal.lodgement_number }} - {{ proposal.application_type.name_display }} - {{ proposal.proposal_type.description }}</h3>
 
             <div class="col-md-3">
                 <CommsLogs
@@ -383,34 +381,30 @@ export default {
         },
         displaySaveBtns: function(){
             let display = false
+
             if ([constants.WITH_ASSESSOR, constants.WITH_ASSESSOR_CONDITIONS].includes(this.proposal.processing_status)){
-                if (this.proposal.accessing_user_roles.includes(constants.ROLES.ASSESSOR.ID)){
-                    display = true
+                if (this.proposal.application_type === constants.APPLICATION_TYPES.LEASE_LICENCE){
+                    if (this.proposal.accessing_user_roles.includes(constants.ROLES.LEASE_LICENCE_ASSESSOR.ID)){
+                        display = true
+                    }
+                } else if (this.proposal.application_type === constants.APPLICATION_TYPES.REGISTRATION_OF_INTEREST){
+                    if (this.proposal.accessing_user_roles.includes(constants.ROLES.REGISTRATION_OF_INTEREST.ID)){
+                        display = true
+                    }
                 }
-            }
-            if ([constants.WITH_REFERRAL, constants.WITH_REFERRAL_CONDITIONS].includes(this.proposal.processing_status)){
+            } else if ([constants.WITH_REFERRAL, constants.WITH_REFERRAL_CONDITIONS].includes(this.proposal.processing_status)){
                 if (this.proposal.accessing_user_roles.includes(constants.ROLES.REFERRAL.ID)){
                     display = true
                 }
             }
+
             return display
         },
-        disableSaveAndContinueBtn: function(){
-            let enabled = false
-            if ([constants.WITH_ASSESSOR, constants.WITH_ASSESSOR_CONDITIONS].includes(this.proposal.processing_status)){
-                if (this.proposal.accessing_user_roles.includes(constants.ROLES.ASSESSOR.ID)){
-                    enabled = true
-                }
-            }
-            if ([constants.WITH_REFERRAL, constants.WITH_REFERRAL_CONDITIONS].includes(this.proposal.processing_status)){
-                if (this.proposal.accessing_user_roles.includes(constants.ROLES.REFERRAL.ID)){
-                    enabled = true
-                }
-            }
-            return !enabled
+        disableSaveAndContinueBtn: function(){  // Is this needed?
+            return !this.displaySaveBtns()
         },
-        disableSaveAndExitBtn: function(){
-            return this.disableSaveAndContinueBtn
+        disableSaveAndExitBtn: function(){  // Is this needed?
+            return !this.displaySaveBtns()
         },
         submitter_first_name: function(){
             if (this.proposal.submitter){
@@ -623,7 +617,15 @@ export default {
                 return this.proposal.id;
             }
         },
+        debug: function(){
+            if (this.$route.query.debug){
+                return this.$route.query.debug === 'true'
+            }
+            return false
+        },
         display_approval_screen: function(){
+            if (this.debug)
+                return true
             let ret_val =
                 this.proposal.processing_status == constants.WITH_APPROVER ||
                 this.proposal.processing_status == constants.AWAITING_STICKER ||

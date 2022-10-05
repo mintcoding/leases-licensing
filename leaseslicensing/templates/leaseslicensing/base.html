@@ -25,6 +25,8 @@
         {% block header_top_menu %}
         {% endblock %}
         {% block extra_css %}
+            <link rel="stylesheet" href="{% static 'leaseslicensing_vue/css/app.css' %}?v={{build_tag}}">
+            <link rel="stylesheet" href="{% static 'leaseslicensing_vue/css/chunk-vendors.css' %}?v={{build_tag}}">
         {% endblock %}
         {% block custom_js %}
             <script language="javascript">

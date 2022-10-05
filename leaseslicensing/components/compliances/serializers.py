@@ -118,12 +118,12 @@ class ComplianceSerializer(serializers.ModelSerializer):
 
     def get_assigned_to(self, obj):
         if obj.assigned_to:
-            return obj.assigned_to.get_full_name()
+            return retrieve_email_user(obj.assigned_to).get_full_name()
         return None
 
     def get_submitter(self, obj):
         if obj.submitter:
-            return obj.submitter.get_full_name()
+            return retrieve_email_user(obj.submitter).get_full_name()
         return None
 
     def get_application_type(self, obj):
@@ -210,7 +210,7 @@ class InternalComplianceSerializer(serializers.ModelSerializer):
 
     def get_submitter(self, obj):
         if obj.submitter:
-            return obj.submitter.get_full_name()
+            return retrieve_email_user(obj.submitter).get_full_name()
         return None
 
 

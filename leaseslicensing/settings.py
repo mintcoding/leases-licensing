@@ -62,6 +62,7 @@ INSTALLED_APPS += [
     "leaseslicensing.components.compliances",
     "leaseslicensing.components.bookings",
     "leaseslicensing.components.competitive_processes",
+    "leaseslicensing.components.invoicing",
     "rest_framework",
     "rest_framework_datatables",
     "rest_framework_gis",
@@ -295,4 +296,25 @@ GROUP_NAME_CHOICES = (
     (GROUP_COMPETITIVE_PROCESS_EDITOR, "Competitive Process Editor"),
     (GROUP_FINANCE, "Finance"),
 )
-
+CHARGE_METHOD_ONCE_OFF_CHARGE = 'once_off_charge'
+CHARGE_METHOD_BASE_FEE_PLUS_FIXED_ANNUAL_INCREMENT = 'base_fee_plus_fixed_annual_increment'
+CHARGE_METHOD_BASE_FEE_PLUS_FIXED_ANNUAL_PERCENTAGE = 'base_fee_plus_fixed_annual_percentage'
+CHARGE_METHOD_BASE_FEE_PLUS_ANNUAL_CPI = 'base_fee_plus_annual_cpi'
+CHARGE_METHOD_PERCENTAGE_OF_GROSS_TURNOVER = 'percentage_of_gross_turnover'
+CHARGE_METHOD_NO_RENT_OR_LICENCE_CHARGE = 'no_rent_or_licence_charge'
+CHARGE_METHODS = (
+    (CHARGE_METHOD_ONCE_OFF_CHARGE, 'Once-off charge'),
+    (CHARGE_METHOD_BASE_FEE_PLUS_FIXED_ANNUAL_INCREMENT, 'Base fee plus fixed annual increment'),
+    (CHARGE_METHOD_BASE_FEE_PLUS_FIXED_ANNUAL_PERCENTAGE, 'Base fee plus fixed annual percentage'),
+    (CHARGE_METHOD_BASE_FEE_PLUS_ANNUAL_CPI, 'Base fee plus annual CPI'),
+    (CHARGE_METHOD_PERCENTAGE_OF_GROSS_TURNOVER, 'Percentage of gross turnover'),
+    (CHARGE_METHOD_NO_RENT_OR_LICENCE_CHARGE, 'No rent or licence charge'),
+)
+REPETITION_TYPE_ANNUALLY = 'annually'
+REPETITION_TYPE_QUARTERLY = 'quarterly'
+REPETITION_TYPE_MONTHLY = 'monthly'
+REPETITION_TYPES = (
+    (REPETITION_TYPE_ANNUALLY, 'Annually'),
+    (REPETITION_TYPE_QUARTERLY, 'Quarterly'),
+    (REPETITION_TYPE_MONTHLY, 'Monthly'),
+)

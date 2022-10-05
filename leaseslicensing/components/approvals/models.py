@@ -441,8 +441,10 @@ class Approval(RevisionedMixin):
                 "previous_application": self.current_proposal,
                 "proposal_type": ProposalType.objects.get(code=PROPOSAL_TYPE_AMENDMENT),
             }
-            proposal = Proposal.objects.get(**amend_conditions)
-            if proposal:
+            proposals = Proposal.objects.filter(**amend_conditions)
+            if proposals:
+                if proposals.count() > 1:
+                    logging.error('Approval: {} has more than one current amendment proposals'.format(self.lodgement_number))
                 return False
         return True
 

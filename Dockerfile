@@ -5,9 +5,9 @@ MAINTAINER asi@dbca.wa.gov.au
 ENV DEBIAN_FRONTEND=noninteractive
 #ENV DEBUG=True
 ENV TZ=Australia/Perth
-ENV EMAIL_HOST="smtp.corporateict.domain"
+ENV EMAIL_HOST="email.server"
 ENV DEFAULT_FROM_EMAIL='no-reply@dbca.wa.gov.au'
-ENV NOTIFICATION_EMAIL='oak.mcilwain@dbca.wa.gov.au'
+ENV NOTIFICATION_EMAIL='none@none.com'
 ENV NON_PROD_EMAIL='none@none.com'
 ENV PRODUCTION_EMAIL=False
 ENV EMAIL_INSTANCE='DEV'

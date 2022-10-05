@@ -7,6 +7,7 @@ from django.conf import settings
 
 from leaseslicensing.components.emails.emails import TemplateEmailBase
 from ledger_api_client.ledger_models import EmailUserRO as EmailUser
+from leaseslicensing.ledger_api_utils import retrieve_email_user
 
 logger = logging.getLogger(__name__)
 
@@ -105,13 +106,13 @@ def send_amendment_email_notification(
     }
 
     submitter = (
-        compliance.submitter.email
-        if compliance.submitter and compliance.submitter.email
-        else compliance.proposal.submitter.email
+        retrieve_email_user(compliance.submitter).email
+        if compliance.submitter and retrieve_email_user(compliance.submitter).email
+        else retrieve_email_user(compliance.proposal.submitter).email
     )
     all_ccs = []
-    if compliance.proposal.org_applicant and compliance.proposal.org_applicant.email:
-        cc_list = compliance.proposal.org_applicant.email
+    if compliance.proposal.org_applicant and retrieve_email_user(compliance.proposal.org_applicant).email:
+        cc_list = retrieve_email_user(compliance.proposal.org_applicant).email
         if cc_list:
             all_ccs = [cc_list]
     msg = email.send(submitter, cc=all_ccs, context=context)
@@ -120,14 +121,14 @@ def send_amendment_email_notification(
 
     sender = request.user if request else settings.DEFAULT_FROM_EMAIL
     _log_compliance_email(msg, compliance, sender=sender)
-    if compliance.proposal.org_applicant:
-        _log_org_email(
-            msg, compliance.proposal.org_applicant, compliance.submitter, sender=sender
-        )
-    else:
-        _log_user_email(
-            msg, compliance.proposal.submitter, compliance.submitter, sender=sender
-        )
+    #if compliance.proposal.org_applicant:
+    #    _log_org_email(
+    #        msg, compliance.proposal.org_applicant, compliance.submitter, sender=sender
+    #    )
+    #else:
+    #    _log_user_email(
+    #        msg, compliance.proposal.submitter, compliance.submitter, sender=sender
+    #    )
 
 
 # send reminder emails if Compliance has not been lodged by due date. Used in Cron job so cannot use 'request' parameter
@@ -330,35 +331,37 @@ def send_external_submit_email_notification(request, compliance, is_test=False):
         reverse("external-compliance-detail", kwargs={"compliance_pk": compliance.id})
     )
     url = "".join(url.split("-internal"))
+
     submitter = (
         compliance.submitter
-        if compliance.submitter and compliance.submitter.email
+        if compliance.submitter
         else compliance.proposal.submitter
     )
     context = {
         "compliance": compliance,
-        "submitter": submitter.get_full_name(),
+        #"submitter": submitter.get_full_name(),
+        "submitter": retrieve_email_user(submitter).get_full_name(),
         "url": url,
     }
     all_ccs = []
-    if compliance.proposal.org_applicant and compliance.proposal.org_applicant.email:
-        cc_list = compliance.proposal.org_applicant.email
+    if compliance.proposal.org_applicant:
+        cc_list = retrieve_email_user(compliance.proposal.org_applicant).email
         if cc_list:
             all_ccs = [cc_list]
-    msg = email.send(submitter.email, cc=all_ccs, context=context)
+    msg = email.send(retrieve_email_user(submitter).email, cc=all_ccs, context=context)
     if is_test:
         return
 
     sender = request.user if request else settings.DEFAULT_FROM_EMAIL
     _log_compliance_email(msg, compliance, sender=sender)
-    if compliance.proposal.org_applicant:
-        _log_org_email(
-            msg, compliance.proposal.org_applicant, compliance.submitter, sender=sender
-        )
-    else:
-        _log_user_email(
-            msg, compliance.proposal.submitter, compliance.submitter, sender=sender
-        )
+    #if compliance.proposal.org_applicant:
+    #    _log_org_email(
+    #        msg, compliance.proposal.org_applicant, compliance.submitter, sender=sender
+    #    )
+    #else:
+    #    _log_user_email(
+    #        msg, compliance.proposal.submitter, compliance.submitter, sender=sender
+    #    )
 
 
 def send_submit_email_notification(request, compliance, is_test=False):
@@ -380,14 +383,14 @@ def send_submit_email_notification(request, compliance, is_test=False):
 
     sender = request.user if request else settings.DEFAULT_FROM_EMAIL
     _log_compliance_email(msg, compliance, sender=sender)
-    if compliance.proposal.org_applicant:
-        _log_org_email(
-            msg, compliance.proposal.org_applicant, compliance.submitter, sender=sender
-        )
-    else:
-        _log_user_email(
-            msg, compliance.proposal.submitter, compliance.submitter, sender=sender
-        )
+    #if compliance.proposal.org_applicant:
+    #    _log_org_email(
+    #        msg, compliance.proposal.org_applicant, compliance.submitter, sender=sender
+    #    )
+    #else:
+    #    _log_user_email(
+    #        msg, compliance.proposal.submitter, compliance.submitter, sender=sender
+    #    )
 
 
 def send_notification_only_email(compliance, is_test=False):
@@ -502,7 +505,7 @@ def _log_compliance_email(email_message, compliance, sender=None):
     else:
         text = smart_text(email_message)
         subject = ""
-        to = compliance.submitter.email
+        to = retrieve_email_user(compliance.submitter).email
         fromm = smart_text(sender) if sender else SYSTEM_NAME
         all_ccs = ""
 
@@ -515,7 +518,7 @@ def _log_compliance_email(email_message, compliance, sender=None):
         "text": text,
         "compliance": compliance,
         "customer": customer,
-        "staff": staff,
+        "staff": staff.id,
         "to": to,
         "fromm": fromm,
         "cc": all_ccs,
@@ -580,55 +583,55 @@ def _log_org_email(email_message, organisation, customer, sender=None):
     return email_entry
 
 
-def _log_user_email(email_message, emailuser, customer, sender=None):
-    from ledger.accounts.models import EmailUserLogEntry
-
-    if isinstance(
-        email_message,
-        (
-            EmailMultiAlternatives,
-            EmailMessage,
-        ),
-    ):
-        # TODO this will log the plain text body, should we log the html instead
-        text = email_message.body
-        subject = email_message.subject
-        fromm = smart_text(sender) if sender else smart_text(email_message.from_email)
-        # the to email is normally a list
-        if isinstance(email_message.to, list):
-            to = ",".join(email_message.to)
-        else:
-            to = smart_text(email_message.to)
-        # we log the cc and bcc in the same cc field of the log entry as a ',' comma separated string
-        all_ccs = []
-        if email_message.cc:
-            all_ccs += list(email_message.cc)
-        if email_message.bcc:
-            all_ccs += list(email_message.bcc)
-        all_ccs = ",".join(all_ccs)
-
-    else:
-        text = smart_text(email_message)
-        subject = ""
-        to = customer
-        fromm = smart_text(sender) if sender else SYSTEM_NAME
-        all_ccs = ""
-
-    customer = customer
-
-    staff = sender
-
-    kwargs = {
-        "subject": subject,
-        "text": text,
-        "emailuser": emailuser,
-        "customer": customer,
-        "staff": staff,
-        "to": to,
-        "fromm": fromm,
-        "cc": all_ccs,
-    }
-
-    email_entry = EmailUserLogEntry.objects.create(**kwargs)
-
-    return email_entry
+#def _log_user_email(email_message, emailuser, customer, sender=None):
+#    from ledger.accounts.models import EmailUserLogEntry
+#
+#    if isinstance(
+#        email_message,
+#        (
+#            EmailMultiAlternatives,
+#            EmailMessage,
+#        ),
+#    ):
+#        # TODO this will log the plain text body, should we log the html instead
+#        text = email_message.body
+#        subject = email_message.subject
+#        fromm = smart_text(sender) if sender else smart_text(email_message.from_email)
+#        # the to email is normally a list
+#        if isinstance(email_message.to, list):
+#            to = ",".join(email_message.to)
+#        else:
+#            to = smart_text(email_message.to)
+#        # we log the cc and bcc in the same cc field of the log entry as a ',' comma separated string
+#        all_ccs = []
+#        if email_message.cc:
+#            all_ccs += list(email_message.cc)
+#        if email_message.bcc:
+#            all_ccs += list(email_message.bcc)
+#        all_ccs = ",".join(all_ccs)
+#
+#    else:
+#        text = smart_text(email_message)
+#        subject = ""
+#        to = customer
+#        fromm = smart_text(sender) if sender else SYSTEM_NAME
+#        all_ccs = ""
+#
+#    customer = customer
+#
+#    staff = sender
+#
+#    kwargs = {
+#        "subject": subject,
+#        "text": text,
+#        "emailuser": emailuser,
+#        "customer": customer,
+#        "staff": staff,
+#        "to": to,
+#        "fromm": fromm,
+#        "cc": all_ccs,
+#    }
+#
+#    email_entry = EmailUserLogEntry.objects.create(**kwargs)
+#
+#    return email_entry

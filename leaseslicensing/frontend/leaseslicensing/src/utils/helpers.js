@@ -25,8 +25,9 @@ module.exports = {
                 const getResponse = await fetch(url);
                 response = await getResponse.json();
             } catch(error) {
+                console.error(error);
                 //throw error;
-                response = error;
+                //response = error;
             }
         } else if (parsedMethod === 'POST') {
             try {
@@ -36,8 +37,9 @@ module.exports = {
                 })
                 response = await postResponse.json();
             } catch(error) {
+                console.error(error);
                 //throw error;
-                response = error;
+                //response = error;
             }
         }
         //return jsonData;
@@ -246,8 +248,14 @@ module.exports = {
         })
     },
     parseFetchError: async function(response) {
-        let errorString = ''
-        const resData = await response.json()
+        let errorString = '';
+        let resData = '';
+        try {
+            resData = await response.json();
+        } catch(error) {
+            console.error(error);
+            resData = response;
+        }
         console.log(resData)
         if (Array.isArray(resData)) {
             for (let i=0; i<resData.length; i++) {

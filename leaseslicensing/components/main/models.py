@@ -415,7 +415,7 @@ class UserSystemSettings(models.Model):
         app_label = "leaseslicensing"
         verbose_name_plural = "User System Settings"
 
-
+# Not ready for use
 class SecurityGroup(models.Model):
 
     #name = models.CharField(max_length=150, unique=True)
@@ -437,6 +437,7 @@ class SecurityGroup(models.Model):
         SecurityGroupMembership.objects.create(group=self,emailuser=user_id)
 
 
+# Not ready for use
 class SecurityGroupMembership(models.Model):
     group = models.ForeignKey(SecurityGroup, on_delete=models.PROTECT)
     #emailuser = models.ForeignKey(EmailUser, on_delete=models.PROTECT, blank=True, null=True, db_constraint=False)

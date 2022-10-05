@@ -53,9 +53,9 @@
                 />
             </div>
         </div>
-        <ApprovalCancellation ref="approval_cancellation"  @refreshFromResponse="refreshFromResponseApprovalModify"></ApprovalCancellation>
-        <ApprovalSuspension ref="approval_suspension"  @refreshFromResponse="refreshFromResponseApprovalModify"></ApprovalSuspension>
-        <ApprovalSurrender ref="approval_surrender"  @refreshFromResponse="refreshFromResponseApprovalModify"></ApprovalSurrender>
+        <ApprovalCancellation ref="approval_cancellation" @refreshFromResponse="refreshFromResponseApprovalModify"></ApprovalCancellation>
+        <ApprovalSuspension ref="approval_suspension" @refreshFromResponse="refreshFromResponseApprovalModify"></ApprovalSuspension>
+        <ApprovalSurrender ref="approval_surrender" @refreshFromResponse="refreshFromResponseApprovalModify"></ApprovalSurrender>
         <div v-if="approvalHistoryId">
             <ApprovalHistory
                 ref="approval_history"

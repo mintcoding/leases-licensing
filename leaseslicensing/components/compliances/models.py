@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.contrib.sites.models import Site
 from django.conf import settings
 from ledger_api_client.ledger_models import EmailUserRO as EmailUser
+from leaseslicensing.ledger_api_utils import retrieve_email_user
 from leaseslicensing import exceptions
 from leaseslicensing.components.main.models import (
     CommunicationsLogEntry,
@@ -231,7 +232,7 @@ class Compliance(models.Model):
             self.assigned_to = user
             self.save()
             self.log_user_action(
-                ComplianceUserAction.ACTION_ASSIGN_TO.format(user.get_full_name()),
+                ComplianceUserAction.ACTION_ASSIGN_TO.format(retrieve_email_user(user).get_full_name()),
                 request,
             )
 
@@ -470,7 +471,7 @@ class ComplianceAmendmentRequest(CompRequest):
                 applicant_field = getattr(
                     compliance.proposal, compliance.proposal.applicant_field
                 )
-                applicant_field.log_user_action(
-                    ComplianceUserAction.ACTION_ID_REQUEST_AMENDMENTS, request
-                )
+                #applicant_field.log_user_action(
+                #    ComplianceUserAction.ACTION_ID_REQUEST_AMENDMENTS, request
+                #)
                 send_amendment_email_notification(self, request, compliance)

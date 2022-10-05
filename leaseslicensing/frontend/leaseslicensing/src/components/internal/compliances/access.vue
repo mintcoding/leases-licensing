@@ -156,7 +156,7 @@ export default {
       next(async (vm) => {
           const url = helpers.add_endpoint_json(api_endpoints.compliances,to.params.compliance_id+'/internal_compliance');
           vm.compliance = Object.assign({}, await helpers.fetchWrapper(url));
-          //vm.members = vm.compliance.allowed_assessors;
+          vm.members = vm.compliance.allowed_assessors;
       });
   },
   components: {

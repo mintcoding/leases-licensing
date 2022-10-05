@@ -9,13 +9,13 @@
         <div v-else class="row">
             <div class="col-sm-12">
                 <form class="form-horizontal" name="personal_form" method="post">
-                    <FormSection label="Apply on behalf of">
+                    <!--FormSection label="Apply on behalf of">
                         <label style="margin-left:20px">Apply on behalf of</label>
                         <div class="col-sm-12" style="margin-left:20px">
                             <div class="form-group">
                             </div>
                         </div>
-                    </FormSection>
+                    </FormSection-->
 
                     <FormSection label="Apply for">
                         <label style="margin-left:20px">Apply for</label>

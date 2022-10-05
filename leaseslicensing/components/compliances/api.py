@@ -5,6 +5,7 @@ import base64
 import geojson
 from six.moves.urllib.parse import urlparse
 from wsgiref.util import FileWrapper
+from copy import deepcopy
 from django.db.models import Q, Min
 from django.db import transaction
 from django.http import HttpResponse
@@ -284,7 +285,7 @@ class ComplianceViewSet(viewsets.ModelViewSet):
     def assign_request_user(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
-            instance.assign_to(request.user, request)
+            instance.assign_to(request.user.id, request)
             serializer = InternalComplianceSerializer(instance)
             return Response(serializer.data)
         except serializers.ValidationError:
@@ -331,16 +332,16 @@ class ComplianceViewSet(viewsets.ModelViewSet):
         try:
             instance = self.get_object()
             user_id = request.data.get("user_id", None)
-            user = None
+            #user = None
             if not user_id:
                 raise serializers.ValiationError("A user id is required")
-            try:
-                user = EmailUser.objects.get(id=user_id)
-            except EmailUser.DoesNotExist:
-                raise serializers.ValidationError(
-                    "A user with the id passed in does not exist"
-                )
-            instance.assign_to(user, request)
+            #try:
+            #    user = EmailUser.objects.get(id=user_id)
+            #except EmailUser.DoesNotExist:
+            #    raise serializers.ValidationError(
+            #        "A user with the id passed in does not exist"
+            #    )
+            instance.assign_to(user_id, request)
             serializer = InternalComplianceSerializer(instance)
             return Response(serializer.data)
         except serializers.ValidationError:
@@ -509,7 +510,9 @@ class ComplianceAmendmentRequestViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
-            serializer = self.get_serializer(data=request.data)
+            request_data = deepcopy(request.data)
+            request_data.update({"officer": request.user.id})
+            serializer = self.get_serializer(data=request_data)
             serializer.is_valid(raise_exception=True)
             instance = serializer.save()
             instance.generate_amendment(request)

@@ -31,7 +31,7 @@ class TemplateEmailBase(object):
         self,
         subject="",
         html_template="leaseslicensing/emails/base_email.html",
-        txt_template="leaseslicensing/emails/base-email.txt",
+        txt_template="leaseslicensing/emails/base_email.txt",
     ):
         self.subject = subject
         self.html_template = html_template

@@ -69,6 +69,8 @@ router.register(r'temporary_document', main_api.TemporaryDocumentCollectionViewS
 api_patterns = [
     url(r"^api/profile$", users_api.GetProfile.as_view(), name="get-profile"),
     url(r"^api/countries$", users_api.GetCountries.as_view(), name="get-countries"),
+    url(r"^api/charge_methods$", users_api.GetChargeMethods.as_view(), name="get-charge-methods"),
+    url(r"^api/repetition_types$", users_api.GetRepetitionTypes.as_view(), name="get-repetition-types"),
     # url(
     #     r"^api/department_users$",
     #     users_api.DepartmentUserList.as_view(),
@@ -242,8 +244,8 @@ urlpatterns = [
     ##following url is defined so that to include url path when sending Proposal amendment request to user.
     # url(r'^external/proposal/(?P<proposal_pk>\d+)/$', views.ExternalProposalView.as_view(), name='external-proposal-detail'),
     # url(r'^internal/proposal/(?P<proposal_pk>\d+)/$', views.InternalProposalView.as_view(), name='internal-proposal-detail'),
-    # url(r'^external/compliance/(?P<compliance_pk>\d+)/$', views.ExternalComplianceView.as_view(), name='external-compliance-detail'),
-    # url(r'^internal/compliance/(?P<compliance_pk>\d+)/$', views.InternalComplianceView.as_view(), name='internal-compliance-detail'),
+    url(r'^external/compliance/(?P<compliance_pk>\d+)/$', views.ExternalComplianceView.as_view(), name='external-compliance-detail'),
+    url(r'^internal/compliance/(?P<compliance_pk>\d+)/$', views.InternalComplianceView.as_view(), name='internal-compliance-detail'),
     ##url(r'^organisations/(?P<pk>\d+)/confirm-delegate-access/(?P<uid>[0-9A-Za-z]+)-(?P<token>.+)/$', views.ConfirmDelegateAccess.as_view(), name='organisation_confirm_delegate_access'),
     ## reversion history-compare
     # url(r'^history/proposal/(?P<pk>\d+)/$', proposal_views.ProposalHistoryCompareView.as_view(), name='proposal_history'),

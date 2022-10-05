@@ -39,6 +39,10 @@ from leaseslicensing.helpers import is_assessor
 from leaseslicensing.ledger_api_utils import retrieve_email_user
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
+from leaseslicensing.settings import GROUP_NAME_CHOICES
+from ledger_api_client.managed_models import SystemGroup
+
+
 # from reversion.models import Version
 
 # still required
@@ -910,19 +914,26 @@ class InternalProposalSerializer(BaseProposalSerializer):
         request = self.context.get("request")
         accessing_user = request.user
         roles = []
-        if (
-            accessing_user.id
-            in proposal.get_assessor_group().get_system_group_member_ids()
-        ):
-            roles.append("assessor")
-        if (
-            accessing_user.id
-            in proposal.get_approver_group().get_system_group_member_ids()
-        ):
-            roles.append("approver")
+
+        for choice in GROUP_NAME_CHOICES:
+            group = SystemGroup.objects.get(name=choice[0])
+            ids = group.get_system_group_member_ids()
+            if accessing_user.id in ids:
+                roles.append(group.name)
+
+        # assessor_group = proposal.get_assessor_group()
+        # ids = assessor_group.get_system_group_member_ids()
+        # # if accessing_user.id in proposal.get_assessor_group().get_system_group_member_ids():
+        # if accessing_user.id in ids:
+        #     roles.append("assessor")
+        #
+        # if accessing_user.id in proposal.get_approver_group().get_system_group_member_ids():
+        #     roles.append("approver")
+
         referral_ids = list(proposal.referrals.values_list("referral", flat=True))
         if accessing_user.id in referral_ids:
             roles.append("referral")
+
         return roles
 
     def get_applicant_obj(self, obj):

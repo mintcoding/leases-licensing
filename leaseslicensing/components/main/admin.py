@@ -57,6 +57,7 @@ class MapLayerAdmin(admin.ModelAdmin):
     ]
 
 
+# Not ready for use
 class SecurityGroupFormTemplate(ModelForm):
 
     class Meta:
@@ -72,6 +73,7 @@ class SecurityGroupFormTemplate(ModelForm):
            # self.fields['name'].widget.can_delete_related=False
 
 
+# Not ready for use
 class SecurityGroupMembershipFormTemplate(ModelForm):
 
     class Meta:
@@ -92,6 +94,7 @@ class SecurityGroupMembershipFormTemplate(ModelForm):
                 #print(self.fields['group'].__dict__)
 
 
+# Not ready for use
 def SecurityGroupTemplate(model_instance):
     class SecurityGroupMembershipInline(admin.TabularInline):
         model = SecurityGroupMembership
@@ -131,6 +134,7 @@ def SecurityGroupTemplate(model_instance):
     return SecurityGroupMembershipInline
 
 
+# Not ready for use
 @admin.register(SecurityGroup)
 class SecurityGroupAdmin(admin.ModelAdmin):
     list_display = ('id','name',)

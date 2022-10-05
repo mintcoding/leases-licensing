@@ -63,6 +63,15 @@
             />
         </FormSection>
 
+        <FormSection :formCollapse="false" label="Documents" Index="proposal_documents">
+            <!-- TODO -->
+        </FormSection>
+
+        <FormSection :formCollapse="false" label="Invoicing Details" Index="proposal_invoicing_details">
+            <!-- TODO -->
+            <InvoicingDetails
+            />
+        </FormSection>
     </div>
 </template>
 <script>
@@ -74,6 +83,7 @@ from '@/utils/hooks'
 import { constants } from '@/utils/hooks'
 import ProposedIssuanceForm from '@/components/internal/proposals/proposed_issuance_form.vue'
 import FormSection from "@/components/forms/section_toggle.vue"
+import InvoicingDetails from "@/components/common/invoicing_details.vue"
 
 export default {
     name: 'InternalProposalApproval',
@@ -94,6 +104,7 @@ export default {
     components:{
         ProposedIssuanceForm,
         FormSection,
+        InvoicingDetails,
     },
     computed:{
         approvalIssueDate: function() {

@@ -34,26 +34,8 @@
             <div class="tab-content" id="pills-tabContent">
               <div class="tab-pane fade show active" id="pills-applicant" role="tabpanel" aria-labelledby="pills-applicant-tab">
                   <div v-if="is_external">
-                      <Profile
-                      :isApplication="true"
-                      v-if="applicantType == 'SUB'"
-                      ref="profile"
-                      @profile-fetched="populateProfile"
-                      :proposalId="proposal.id"
-                      :readonly="readonly"
-                      :submitterId="submitterId"
-                      />
                   </div>
                   <div v-else>
-                    <!-- Applicant
-                        :email_user="proposal.submitter"
-                        :applicantType="proposal.applicant_type"
-                        id="proposalStartApplicant"
-                        :readonly="readonly"
-                        :showElectoralRoll="showElectoralRoll"
-                        :storedSilentElector="silentElector"
-                        :proposalId="proposal.id"
-                    / -->
                       <Applicant
                           :email_user="email_user_applicant"
                           :applicantType="proposal.applicant_type"

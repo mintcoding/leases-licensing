@@ -41,6 +41,7 @@ import {
 from '@/utils/hooks'
 //import utils from './utils'
 export default {
+  name: 'externalComplianceSubmit',
   data: function() {
     let vm = this;
     return {
@@ -63,8 +64,11 @@ export default {
     vm.form = document.forms.new_compliance;
   },
   beforeRouteEnter: function(to, from, next) {
-    next(vm => {
-        vm.compliance = to.params.compliance;
+    next(async vm => {
+        const response = await fetch(helpers.add_endpoint_json(api_endpoints.compliances,to.params.compliance_id));
+        const resData = await response.json();
+        vm.compliance = Object.assign({}, resData);
+        //vm.compliance = to.params.compliance;
     })
   }
 }

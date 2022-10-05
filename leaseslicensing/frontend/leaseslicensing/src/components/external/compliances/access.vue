@@ -138,7 +138,7 @@ import {
 }
 from '@/utils/hooks'
 export default {
-  name: 'externalCompliance',
+  name: 'externalComplianceAccess',
   data() {
     let vm = this;
     return {
