@@ -4280,13 +4280,11 @@ class ChecklistQuestion(RevisionedMixin):
 
 
 class ProposalAssessment(RevisionedMixin):
-    # proposal = models.OneToOneField(
     proposal = models.ForeignKey(
-            Proposal, related_name="assessment", on_delete=models.CASCADE
+        Proposal, related_name="assessment", on_delete=models.CASCADE
     )
     completed = models.BooleanField(default=False)
     submitter = models.IntegerField(blank=True, null=True)  # EmailUserRO
-    # referral assessment needs to be a different object
     referral = models.ForeignKey(
        Referral,
        related_name="assessment",
@@ -4316,6 +4314,9 @@ class ProposalAssessment(RevisionedMixin):
 
     class Meta:
         app_label = "leaseslicensing"
+        constraints = [
+            models.UniqueConstraint(fields=['proposal', 'referral',], name='unique_per_proposal_per_assessor_or_referral'),
+        ]
 
     @property
     def checklist(self):

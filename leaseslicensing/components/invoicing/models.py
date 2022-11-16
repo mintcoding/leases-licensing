@@ -323,3 +323,24 @@ class CrownLandRentReviewDate(BaseModel):
     def readonly(self):
         # TODO: implement
         return False
+
+
+class LeaseLicenceFee(BaseModel):
+    """
+    This model handles each invoice and the information surrounding it.
+    An object of this model is created at an invoicing date.
+    """
+    invoicing_details = models.ForeignKey(InvoicingDetails, null=True, blank=True, on_delete=models.SET_NULL)
+    invoice_reference = models.CharField(max_length=50, null=True, blank=True, default="")
+    invoice_cover_start_date = models.DateField(null=True, blank=True)
+    invoice_cover_end_date = models.DateField(null=True, blank=True)
+    date_invoice_sent = models.DateField(null=True, blank=True)
+
+    class Meta:
+        app_label = "leaseslicensing"
+
+    def __str__(self):
+        if self.invoicing_details.approval:
+            return 'Approval: {}, Invoice: {}'.format(self.invoicing_details.approval, self.invoice_reference)
+        else:
+            return 'Proposal: {}, Invoice: {}'.format(self.invoicing_details, self.invoice_reference)

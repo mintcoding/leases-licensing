@@ -42,25 +42,9 @@ class InternalView(UserPassesTestMixin, TemplateView):
     def test_func(self):
         return is_internal(self.request)
 
-    def get_context_data(self, **kwargs):
-        context = super(InternalView, self).get_context_data(**kwargs)
-        context["dev"] = settings.DEV_STATIC
-        context["dev_url"] = settings.DEV_STATIC_URL
-        if hasattr(settings, "DEV_APP_BUILD_URL") and settings.DEV_APP_BUILD_URL:
-            context["app_build_url"] = settings.DEV_APP_BUILD_URL
-        return context
-
 
 class ExternalView(LoginRequiredMixin, TemplateView):
     template_name = "leaseslicensing/dash/index.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(ExternalView, self).get_context_data(**kwargs)
-        context["dev"] = settings.DEV_STATIC
-        context["dev_url"] = settings.DEV_STATIC_URL
-        if hasattr(settings, "DEV_APP_BUILD_URL") and settings.DEV_APP_BUILD_URL:
-            context["app_build_url"] = settings.DEV_APP_BUILD_URL
-        return context
 
 
 class ReferralView(ReferralOwnerMixin, DetailView):
@@ -141,8 +125,6 @@ def first_time(request):
         context["redirect_url"] = request.GET["next"]
     else:
         context["redirect_url"] = "/"
-    context["dev"] = settings.DEV_STATIC
-    context["dev_url"] = settings.DEV_STATIC_URL
     # return render(request, 'leaseslicensing/user_profile.html', context)
     return render(request, "leaseslicensing/dash/index.html", context)
 

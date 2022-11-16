@@ -1788,6 +1788,9 @@ class ProposalViewSet(viewsets.ModelViewSet):
         serializer = InternalSaveProposalSerializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        save_assessor_data(instance, request, self)
+
         #serializer_class = self.internal_serializer_class()
         #serializer = serializer_class(instance, context={"request": request})
         #return Response(serializer.data)

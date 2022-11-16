@@ -531,9 +531,13 @@ def save_referral_data(proposal, request, referral_completed=False):
 def save_assessor_data(proposal, request, viewset):
     with transaction.atomic():
         try:
-            proposal_data = (
-                request.data.get("proposal") if request.data.get("proposal") else {}
-            )
+            proposal_data = {}
+            if request.data.get("proposal"):
+                # request.data is like {'proposal': {'id': ..., ...}}
+                proposal_data = request.data.get("proposal")
+            else:
+                # request.data is a dictionary of the proposal {'id': ..., ...}
+                proposal_data = request.data
 
             # Save checklist answers
             if is_assessor(request.user.id):
